@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="dev_paragon/dev_paragon.vcxproj" />
+  <Project Path="dev_paragon/dev_paragon.vcxproj" Id="d3921456-bc2b-4884-bf80-a8a0122abf96" />
 </Solution>

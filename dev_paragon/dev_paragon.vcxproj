@@ -37,6 +37,7 @@
     <ClInclude Include="external\minhook\src\trampoline.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="paragon.h" />
+    <ClInclude Include="src\sdk\dx11hook.h" />
     <ClInclude Include="src\sdk\hooks.h" />
     <ClInclude Include="src\sdk\Interfaces\c_scene_object.h" />
     <ClInclude Include="src\sdk\Interfaces\engine.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="src\sdk\math\vector4d.h" />
     <ClInclude Include="src\sdk\memory\memory.h" />
     <ClInclude Include="src\sdk\sdk.h" />
+    <ClInclude Include="src\features\visuals\WorldModulation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
@@ -67,6 +69,7 @@
     <ClCompile Include="external\minhook\src\hde\hde64.c" />
     <ClCompile Include="external\minhook\src\hook.c" />
     <ClCompile Include="external\minhook\src\trampoline.c" />
+    <ClCompile Include="src\sdk\dx11hook.cpp" />
     <ClCompile Include="src\sdk\hooks.cpp" />
     <ClCompile Include="src\sdk\Interfaces\engine.cpp" />
     <ClCompile Include="src\sdk\Interfaces\Interfaces.cpp" />
@@ -78,6 +81,7 @@
     <ClCompile Include="src\sdk\math\vector4d.cpp" />
     <ClCompile Include="src\sdk\memory\memory.cpp" />
     <ClCompile Include="src\sdk\sdk.cpp" />
+    <ClCompile Include="src\features\visuals\WorldModulation.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
