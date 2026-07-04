@@ -24,3 +24,11 @@ __int64 __fastcall WorldModulation::hkWallColor(__int64 var1, __int64 var2, c_ag
 
     return original;
 }
+
+void __fastcall WorldModulation::hk_tonemap_render_debug(void* a1, void* a2, void* a3)
+{
+    float brightness = G::world.m_exposure == 0 ? 1.0f : (G::world.m_exposure) / 100.f;
+    Memory::call_vfunc<void>(a1, 5, brightness);
+
+    oToneMap(a1, a2, a3);
+}

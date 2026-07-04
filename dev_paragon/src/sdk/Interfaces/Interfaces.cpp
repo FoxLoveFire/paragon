@@ -33,5 +33,13 @@ bool I::initialize()
 		return false;
 	}
 
+	std::string schema_str = "SchemaSystem_001";
+	schema_system = find_interface<ISchemaSystem*>(GetModuleHandleA("schemasystem.dll"), schema_str.c_str());
+	if (!schema_system)
+	{
+		std::cout << "schema is not initialized!" << std::endl;
+		return false;
+	}
+
 	return true;
 }

@@ -1,4 +1,6 @@
 #include "dx11hook.h"
+#include "cs2/classes/C_CSPlayerPawn/C_CSPlayerPawn.h"
+#include "hooks.h"
 
 ID3D11Device* D::g_pDevice = nullptr;
 ID3D11DeviceContext* D::g_pContext = nullptr;
@@ -24,21 +26,21 @@ namespace D
         {
             G::menu.show = !G::menu.show;
 
-            if (I::input_system)
-            {
-
-                oIsRelativeMouseMode(I::input_system, G::menu.show ? false : true);
+            if (G::menu.show) {
+                ShowCursor(TRUE);
+                oIsRelativeMouseMode(I::input_system, false);
             }
+            else {
+                if (I::engine_client->is_in_game())
+                {
+                    ShowCursor(FALSE);
 
+                    oIsRelativeMouseMode(I::input_system, true);
 
-            if (G::menu.show && !I::engine_client->is_in_game())
-            {
-                ::ClipCursor(nullptr);
-                ImGui::GetIO().MouseDrawCursor = true;
-            }
-            else
-            {
-                ImGui::GetIO().MouseDrawCursor = false;
+                    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+                    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+                    SetCursorPos(screenWidth / 2, screenHeight / 2);
+                }
             }
         }
 
@@ -130,6 +132,14 @@ namespace D
             ImGui::NewFrame();
 
             ImGui::ShowDemoWindow();
+
+        /*  здеся проверка схемы
+            C_CSPlayerPawn* local_player = Hook::oGetLocalPlayer(0);
+            if (local_player)
+            {
+                std::cout << local_player->m_iHealth() << std::endl;
+            }
+        */
 
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
