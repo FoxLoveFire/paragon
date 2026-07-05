@@ -11,6 +11,7 @@
 #include "../features/visuals/Removals.h"
 #include "cs2/classes/C_CSPlayerPawn/C_CSPlayerPawn.h"
 #include "../features/misc/radarhack/radarhack.h"
+#include "../features/chams/chams.h"
 #include "../../globals.h"
 #include "dx11hook.h"
 #include <string>
@@ -23,11 +24,16 @@
 #include <optional>
 #include <array>
 #include <d3dcompiler.h>
-
 #pragma comment(lib, "d3d11.lib")
 
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+using  levelInitFn = __int64(__fastcall*)(__int64 a1, __int64 a2);
+inline levelInitFn olevelInit = nullptr;
+using FrameStageNotifyFn = void(__fastcall*)(void* a1, int stage);
+inline FrameStageNotifyFn oFrameStageNotify = nullptr;
 
+#define SetModel "40 53 48 83 EC ? 48 8B D9 4C 8B C2 48 8B 0D ? ? ? ? 48 8D 54 24"
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace Hook
 {
     bool Hook(const char* pattern, LPVOID detour, LPVOID* original, std::string module);

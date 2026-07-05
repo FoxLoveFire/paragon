@@ -20,6 +20,8 @@ namespace G
 		c_color wall_color = c_color(0, 255, 0);
 
 		int m_exposure = 0;
+
+		float in = 0;
 	};
 
 	inline WorldModulation_t world = WorldModulation_t();
@@ -44,9 +46,9 @@ namespace G
 
 	struct Removals_t
 	{
-		bool disable_smoke = true;
-		bool disable_scopeoverlay = true;
-		bool remove_legs = true;
+		bool disable_smoke = false;
+		bool disable_scopeoverlay = false;
+		bool remove_legs = false;
 		bool disable_flashbang = true;
 	};
 

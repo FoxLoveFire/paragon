@@ -131,8 +131,11 @@ namespace D
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
 
-            ImGui::ShowDemoWindow();
+            ImGui::Begin("Checksssssss");
 
+            ImGui::SliderInt("Brightness", &G::world.m_exposure, 0, 100);
+            ImGui::SliderFloat("Intensity", &G::world.in, 0, 100);
+            ImGui::End();
         /*  здеся проверка схемы
             C_CSPlayerPawn* local_player = Hook::oGetLocalPlayer(0);
             if (local_player)

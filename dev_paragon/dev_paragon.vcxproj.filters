@@ -147,6 +147,9 @@
     <ClInclude Include="src\features\misc\radarhack\radarhack.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\features\chams\chams.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -246,6 +249,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\features\misc\radarhack\radarhack.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\features\chams\chams.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

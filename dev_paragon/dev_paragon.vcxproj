@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\features\chams\chams.h" />
     <ClInclude Include="src\features\misc\radarhack\radarhack.h" />
     <ClInclude Include="src\sdk\cs2\classes\C_CSPlayerPawn\C_CSPlayerPawn.h" />
     <ClInclude Include="external\imgui\imconfig.h" />
@@ -65,6 +66,7 @@
     <ClInclude Include="src\sdk\utils\fnv1a\fnv1a.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\features\chams\chams.cpp" />
     <ClCompile Include="src\features\misc\radarhack\radarhack.cpp" />
     <ClCompile Include="src\sdk\cs2\classes\C_CSPlayerPawn\C_CSPlayerPawn.cpp" />
     <ClCompile Include="dllmain.cpp" />

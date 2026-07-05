@@ -1,5 +1,31 @@
 #include "hooks.h"
-#include "../sdk/Interfaces/c_scene_object.h"
+
+__int64 __fastcall hkLevelInit(__int64 a1, __int64 a2)
+{
+    __int64 original = olevelInit(a1, a2);
+    I::pvs->set(false);
+
+    return original;
+}
+
+void __fastcall hkFrameStageNotify(void* a1, int stage)
+{
+
+    switch (stage)
+    {
+    case FRAME_RENDER_START:
+        break;
+    case FRAME_RENDER_END:
+        break;
+    case FRAME_NET_UPDATE_END:
+        break;
+    case FRAME_SIMULATE_END:
+        break;
+    default:
+        break;
+    }
+    oFrameStageNotify(a1, stage);
+}
 
 bool Hook::Hook(const char* pattern, LPVOID detour, LPVOID* original, std::string module) {
     uintptr_t addr = Memory::pattern_scan(pattern, module);
@@ -44,6 +70,8 @@ bool Hook::initialize()
         (void**)&WorldModulation::oWallColor, "scenesystem.dll");
     Hook("40 53 48 83 EC ? 48 8B D9 0F 29 74 24", WorldModulation::hk_tonemap_render_debug,
         (void**)&WorldModulation::oToneMap, "scenesystem.dll");
+    Hook("45 85 C9 0F 8E ? ? ? ? 4C 8B DC 55", WorldModulation::hkSkyboxArray,
+        (void**)&WorldModulation::oSkyboxArray, "scenesystem.dll");
     Hook("40 57 48 83 EC ? 48 8B FA E8 ? ? ? ? BA", OverrideView::hkOverrideView,
         (void**)&OverrideView::oOverrideView, "client.dll");
     Hook("40 55 53 56 41 56 41 57 48 8B EC", Viewmodel::hkViewModel,
@@ -54,12 +82,18 @@ bool Hook::initialize()
         (void**)&Removals::oDrawScopeOverlay, "client.dll");
     Hook("40 55 53 56 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? F2 0F 10 42", Removals::oDrawLegs,
         (void**)&Removals::oDrawLegs, "client.dll");
-    Hook("40 55 53 56 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? F2 0F 10 42", Removals::hkFlashbangOverlay,
+    Hook("85 D2 0F 88 ? ? ? ? 48 89 4C 24", Removals::hkFlashbangOverlay,
         (void**)&Removals::oFlashbangOverlay, "client.dll");
     Hook("40 53 48 83 EC 20 80 B9 ? ? ? ? ? 48 8B D9 75 78", D::hkMouseInputEnabled, 
         (void**)&D::oMouseInputEnabled, "client.dll");
     Hook("48 89 4C 24 ? 55 41 54 48 8D 6C 24", radarhack::hkRadar,
         (void**)&radarhack::oRadar, "client.dll");
+    Hook("40 55 56 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 0D", hkLevelInit,
+        (void**)&olevelInit, "client.dll");
+    Hook("48 89 5C 24 ? 48 89 6C 24 ? 57 48 83 EC ? 48 8B F9 33 ED", hkFrameStageNotify,
+        (void**)&oFrameStageNotify, "client.dll");
+    Hook("48 8B C4 48 89 58 08 48 89 50 10 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ?", chams::hkOnGeneratePrimitives,
+        (void**)&chams::oOnGeneratePrimitives, "scenesystem.dll");
 
 
     HookVtable(I::input_system, 76, D::hkIsRelativeMouseMode, (void**)&D::oIsRelativeMouseMode, "inputsystem.dll");
