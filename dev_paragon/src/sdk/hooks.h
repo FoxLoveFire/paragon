@@ -6,6 +6,11 @@
 #include "../sdk/memory/memory.h"
 #include "../sdk/Interfaces/Interfaces.h"
 #include "../features/visuals/WorldModulation.h"
+#include "../features/viewport/OverrideView.h"
+#include "../features/viewport/Viewmodel.h"
+#include "../features/visuals/Removals.h"
+#include "cs2/classes/C_CSPlayerPawn/C_CSPlayerPawn.h"
+#include "../features/misc/radarhack/radarhack.h"
 #include "../../globals.h"
 #include "dx11hook.h"
 #include <string>
@@ -25,11 +30,12 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 namespace Hook
 {
-    bool Hook(const char* pattern, LPVOID detour, LPVOID* original, std::string module);
-    bool HookAddress(uintptr_t address, LPVOID detour, LPVOID* original);
-    bool HookVtable(void* class_instance, int index, void* detour, void** original, std::string module);
+	bool Hook(const char* pattern, LPVOID detour, LPVOID* original, std::string module);
+	bool HookAddress(uintptr_t address, LPVOID detour, LPVOID* original);
+	bool HookVtable(void* class_instance, int index, void* detour, void** original, std::string module);
 
-    bool initialize();
-    void shutdown();
+	bool initialize();
+	void shutdown();
 
+	inline C_CSPlayerPawn* (__fastcall* oGetLocalPlayer)(int);
 }

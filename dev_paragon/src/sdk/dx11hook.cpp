@@ -1,4 +1,6 @@
 #include "dx11hook.h"
+#include "hooks.h"
+#include "../../menu/menu.h"
 
 ID3D11Device* D::g_pDevice = nullptr;
 ID3D11DeviceContext* D::g_pContext = nullptr;
@@ -19,19 +21,16 @@ namespace D
 {
     LRESULT CALLBACK WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-
         if (uMsg == WM_KEYDOWN && wParam == VK_INSERT)
         {
             G::menu.show = !G::menu.show;
 
             if (I::input_system)
             {
-
-                oIsRelativeMouseMode(I::input_system, G::menu.show ? false : true);
+                oIsRelativeMouseMode(I::input_system, !G::menu.show);
             }
 
-
-            if (G::menu.show && !I::engine_client->is_in_game())
+            if (G::menu.show)
             {
                 ::ClipCursor(nullptr);
                 ImGui::GetIO().MouseDrawCursor = true;
@@ -39,6 +38,13 @@ namespace D
             else
             {
                 ImGui::GetIO().MouseDrawCursor = false;
+                
+                if (I::engine_client && I::engine_client->is_in_game())
+                {
+                    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+                    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+                    SetCursorPos(screenWidth / 2, screenHeight / 2);
+                }
             }
         }
 
@@ -56,7 +62,6 @@ namespace D
             case WM_MOUSEWHEEL:
                 return 1L;
             }
-
 
             const ImGuiIO& io = ImGui::GetIO();
             if (io.WantCaptureKeyboard) {
@@ -83,10 +88,11 @@ namespace D
                 pSwapChain->GetDesc(&desc);
                 g_hWindow = desc.OutputWindow;
 
-                ComPtr<ID3D11Texture2D> pBackBuffer;
+                ID3D11Texture2D* pBackBuffer = nullptr;
                 if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-                    pBackBuffer.GetVoidAddressOf()))) {
-                    g_pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &g_pRenderTargetView);
+                    (void**)&pBackBuffer))) {
+                    g_pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_pRenderTargetView);
+                    pBackBuffer->Release();
                 }
 
                 IMGUI_CHECKVERSION();
@@ -107,21 +113,22 @@ namespace D
         }
 
         if (!g_pRenderTargetView) {
-            ComPtr<ID3D11Texture2D> pBackBuffer;
+            ID3D11Texture2D* pBackBuffer = nullptr;
             if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-                pBackBuffer.GetVoidAddressOf()))) {
-                g_pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &g_pRenderTargetView);
+                (void**)&pBackBuffer))) {
+                g_pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_pRenderTargetView);
+                pBackBuffer->Release();
             }
         }
 
         if (G::menu.show && g_pRenderTargetView && g_pContext) {
-            ComPtr<ID3D11RenderTargetView> pOldRTV;
-            ComPtr<ID3D11DepthStencilView> pOldDSV;
-            g_pContext->OMGetRenderTargets(1, pOldRTV.GetAddressOf(), pOldDSV.GetAddressOf());
+            ID3D11RenderTargetView* pOldRTV = nullptr;
+            ID3D11DepthStencilView* pOldDSV = nullptr;
+            g_pContext->OMGetRenderTargets(1, &pOldRTV, &pOldDSV);
 
-            std::array<D3D11_VIEWPORT, D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE> oldVP{};
-            UINT numViewports = oldVP.size();
-            g_pContext->RSGetViewports(&numViewports, oldVP.data());
+            D3D11_VIEWPORT oldVP[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
+            UINT numViewports = D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
+            g_pContext->RSGetViewports(&numViewports, oldVP);
 
             g_pContext->OMSetRenderTargets(1, &g_pRenderTargetView, nullptr);
 
@@ -129,13 +136,16 @@ namespace D
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
 
-            ImGui::ShowDemoWindow();
+            Menu::Render();
 
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-            g_pContext->RSSetViewports(numViewports, oldVP.data());
-            g_pContext->OMSetRenderTargets(1, pOldRTV.GetAddressOf(), pOldDSV.Get());
+            g_pContext->RSSetViewports(numViewports, oldVP);
+            g_pContext->OMSetRenderTargets(1, &pOldRTV, pOldDSV);
+
+            if (pOldRTV) pOldRTV->Release();
+            if (pOldDSV) pOldDSV->Release();
         }
 
         return g_pOriginalPresent(pSwapChain, SyncInterval, Flags);
@@ -144,19 +154,22 @@ namespace D
     __int64 __fastcall hkResizeBuffers(IDXGISwapChain* pSwapChain, UINT BufferCount, UINT Width, UINT Height, DXGI_FORMAT NewFormat, UINT SwapChainFlags)
     {
         if (g_pRenderTargetView) {
+            g_pContext->OMSetRenderTargets(0, nullptr, nullptr);
             g_pRenderTargetView->Release();
             g_pRenderTargetView = nullptr;
         }
+
         ImGui_ImplDX11_InvalidateDeviceObjects();
-        auto result = g_pResizeBuffers(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
+
+        __int64 result = g_pResizeBuffers(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
 
         if (SUCCEEDED(result))
         {
-            ID3D11Texture2D* backBuffer = nullptr;
-            if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer)))
+            ID3D11Texture2D* pBackBuffer = nullptr;
+            if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBackBuffer)))
             {
-                g_pDevice->CreateRenderTargetView(backBuffer, nullptr, &g_pRenderTargetView);
-                backBuffer->Release();
+                g_pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_pRenderTargetView);
+                pBackBuffer->Release();
             }
             ImGui_ImplDX11_CreateDeviceObjects();
         }

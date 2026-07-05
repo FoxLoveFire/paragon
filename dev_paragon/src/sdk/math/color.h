@@ -112,12 +112,12 @@ public:
         return colors.rgba[index];
     }
 
-    const bool& operator==(const c_color& other) const
+    bool operator==(const c_color& other) const
     {
         return other.r() == r() && other.g() == g() && other.b() == b() && other.a() == a();
     }
 
-    const bool& operator!=(const c_color& other) const
+    bool operator!=(const c_color& other) const
     {
         return !(*this == other);
     }

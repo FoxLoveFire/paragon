@@ -36,10 +36,19 @@
     <ClInclude Include="external\minhook\src\hde\table64.h" />
     <ClInclude Include="external\minhook\src\trampoline.h" />
     <ClInclude Include="globals.h" />
+    <ClInclude Include="menu\menu.h" />
     <ClInclude Include="paragon.h" />
+    <ClInclude Include="src\features\misc\radarhack\radarhack.h" />
+    <ClInclude Include="src\features\viewport\OverrideView.h" />
+    <ClInclude Include="src\features\viewport\Viewmodel.h" />
+    <ClInclude Include="src\features\visuals\Removals.h" />
+    <ClInclude Include="src\features\visuals\WorldModulation.h" />
+    <ClInclude Include="src\sdk\cs2\classes\C_CSPlayerPawn\C_CSPlayerPawn.h" />
+    <ClInclude Include="src\sdk\cs2\datatypes\schema\ISchemaClass\ISchemaClass.h" />
     <ClInclude Include="src\sdk\dx11hook.h" />
     <ClInclude Include="src\sdk\hooks.h" />
     <ClInclude Include="src\sdk\Interfaces\c_scene_object.h" />
+    <ClInclude Include="src\sdk\Interfaces\c_view_setup.h" />
     <ClInclude Include="src\sdk\Interfaces\engine.h" />
     <ClInclude Include="src\sdk\Interfaces\Interfaces.h" />
     <ClInclude Include="src\sdk\math\color.h" />
@@ -53,7 +62,8 @@
     <ClInclude Include="src\sdk\math\vector4d.h" />
     <ClInclude Include="src\sdk\memory\memory.h" />
     <ClInclude Include="src\sdk\sdk.h" />
-    <ClInclude Include="src\features\visuals\WorldModulation.h" />
+    <ClInclude Include="src\sdk\utils\fnv1a\fnv1a.h" />
+    <ClInclude Include="src\sdk\utils\schema\schema.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
@@ -69,6 +79,14 @@
     <ClCompile Include="external\minhook\src\hde\hde64.c" />
     <ClCompile Include="external\minhook\src\hook.c" />
     <ClCompile Include="external\minhook\src\trampoline.c" />
+    <ClCompile Include="menu\menu.cpp" />
+    <ClCompile Include="src\features\misc\radarhack\radarhack.cpp" />
+    <ClCompile Include="src\features\viewport\OverrideView.cpp" />
+    <ClCompile Include="src\features\viewport\Viewmodel.cpp" />
+    <ClCompile Include="src\features\visuals\Removals.cpp" />
+    <ClCompile Include="src\features\visuals\WorldModulation.cpp" />
+    <ClCompile Include="src\sdk\cs2\classes\C_CSPlayerPawn\C_CSPlayerPawn.cpp" />
+    <ClCompile Include="src\sdk\cs2\datatypes\schema\ISchemaClass\ISchemaClass.cpp" />
     <ClCompile Include="src\sdk\dx11hook.cpp" />
     <ClCompile Include="src\sdk\hooks.cpp" />
     <ClCompile Include="src\sdk\Interfaces\engine.cpp" />
@@ -81,7 +99,7 @@
     <ClCompile Include="src\sdk\math\vector4d.cpp" />
     <ClCompile Include="src\sdk\memory\memory.cpp" />
     <ClCompile Include="src\sdk\sdk.cpp" />
-    <ClCompile Include="src\features\visuals\WorldModulation.cpp" />
+    <ClCompile Include="src\sdk\utils\schema\schema.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
