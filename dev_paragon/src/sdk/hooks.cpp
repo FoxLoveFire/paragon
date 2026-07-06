@@ -82,7 +82,7 @@ bool Hook::initialize()
         (void**)&Removals::oDrawScopeOverlay, "client.dll");
     Hook("40 55 53 56 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? F2 0F 10 42", Removals::hkDrawLegs,
         (void**)&Removals::oDrawLegs, "client.dll");
-    Hook("85 D2 0F 88 ? ? ? ? 48 89 4C 24", Removals::hkFlashbangOverlay,
+    Hook("85 D2 0F 88 ? ? ? ? 48 89 4C 24 ? 55 56", Removals::hkFlashbangOverlay,
         (void**)&Removals::oFlashbangOverlay, "client.dll");
     Hook("40 53 48 83 EC 20 80 B9 ? ? ? ? ? 48 8B D9 75 78", D::hkMouseInputEnabled, 
         (void**)&D::oMouseInputEnabled, "client.dll");
@@ -100,6 +100,8 @@ bool Hook::initialize()
         (void**)&D::g_pOriginalPresent, "GameOverlayRenderer64.dll");
     Hook("40 53 55 56 57 41 54 41 56 41 57 48 83 EC ? 44 8B E2", D::hkResizeBuffers,
         (void**)&D::g_pResizeBuffers, "GameOverlayRenderer64.dll");
+
+    Material::material_init();
 
     std::cout << "[+] All hooks installed successfully!" << std::endl;
     return true;

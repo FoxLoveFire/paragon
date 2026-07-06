@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\sdk\cs2\datatypes\C_Material\C_Material.h" />
+    <ClInclude Include="src\sdk\utils\CStrongHandle\CStrongHandle.h" />
+    <ClInclude Include="src\sdk\utils\keyvalues\keyvalues.h" />
+    <ClInclude Include="src\sdk\utils\cutlbuffer\cutlbuffer.h" />
     <ClInclude Include="src\features\chams\chams.h" />
     <ClInclude Include="src\features\misc\radarhack\radarhack.h" />
     <ClInclude Include="src\sdk\cs2\classes\C_CSPlayerPawn\C_CSPlayerPawn.h" />
@@ -81,6 +85,8 @@
     <ClInclude Include="src\sdk\utils\fnv1a\fnv1a.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\sdk\utils\keyvalues\keyvalues.cpp" />
+    <ClCompile Include="src\sdk\utils\cutlbuffer\cutlbuffer.cpp" />
     <ClCompile Include="src\features\chams\chams.cpp" />
     <ClCompile Include="src\features\misc\radarhack\radarhack.cpp" />
     <ClCompile Include="src\sdk\cs2\classes\C_CSPlayerPawn\C_CSPlayerPawn.cpp" />
