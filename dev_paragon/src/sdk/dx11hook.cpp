@@ -1,6 +1,5 @@
 #include "dx11hook.h"
-#include "cs2/classes/C_CSPlayerPawn/C_CSPlayerPawn.h"
-#include "hooks.h"
+
 
 ID3D11Device* D::g_pDevice = nullptr;
 ID3D11DeviceContext* D::g_pContext = nullptr;
@@ -129,13 +128,7 @@ namespace D
 
             ImGui_ImplDX11_NewFrame();
             ImGui_ImplWin32_NewFrame();
-            ImGui::NewFrame();
 
-            ImGui::Begin("Checksssssss");
-
-            ImGui::SliderInt("Brightness", &G::world.m_exposure, 0, 100);
-            ImGui::SliderFloat("Intensity", &G::world.in, 0, 100);
-            ImGui::End();
         /*  здеся проверка схемы
             C_CSPlayerPawn* local_player = Hook::oGetLocalPlayer(0);
             if (local_player)
@@ -143,6 +136,7 @@ namespace D
                 std::cout << local_player->m_iHealth() << std::endl;
             }
         */
+            Menu::Render();
 
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

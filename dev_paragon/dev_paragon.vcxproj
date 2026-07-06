@@ -40,6 +40,19 @@
     <ClInclude Include="external\minhook\src\trampoline.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="src\sdk\cs2\datatypes\schema\ISchemaClass\ISchemaClass.h" />
+    <ClInclude Include="src\sdk\menu\elements\bind.h" />
+    <ClInclude Include="src\sdk\menu\elements\button.h" />
+    <ClInclude Include="src\sdk\menu\elements\checkbox.h" />
+    <ClInclude Include="src\sdk\menu\elements\colorpicker.h" />
+    <ClInclude Include="src\sdk\menu\elements\colors.h" />
+    <ClInclude Include="src\sdk\menu\elements\dropdown.h" />
+    <ClInclude Include="src\sdk\menu\elements\elements.h" />
+    <ClInclude Include="src\sdk\menu\elements\slider.h" />
+    <ClInclude Include="src\sdk\menu\elements\subtab.h" />
+    <ClInclude Include="src\sdk\menu\elements\tabbar.h" />
+    <ClInclude Include="src\sdk\menu\elements\textinput.h" />
+    <ClInclude Include="src\sdk\menu\elements\utils.h" />
+    <ClInclude Include="src\sdk\menu\menu.h" />
     <ClInclude Include="src\sdk\utils\schema\schema.h" />
     <ClInclude Include="src\features\visuals\Removals.h" />
     <ClInclude Include="src\features\viewport\OverrideView.h" />
@@ -83,6 +96,7 @@
     <ClCompile Include="external\minhook\src\hook.c" />
     <ClCompile Include="external\minhook\src\trampoline.c" />
     <ClCompile Include="src\sdk\cs2\datatypes\schema\ISchemaClass\ISchemaClass.cpp" />
+    <ClCompile Include="src\sdk\menu\menu.cpp" />
     <ClCompile Include="src\sdk\utils\schema\schema.cpp" />
     <ClCompile Include="src\features\visuals\Removals.cpp" />
     <ClCompile Include="src\features\viewport\OverrideView.cpp" />

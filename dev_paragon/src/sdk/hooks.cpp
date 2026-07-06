@@ -94,34 +94,12 @@ bool Hook::initialize()
         (void**)&oFrameStageNotify, "client.dll");
     Hook("48 8B C4 48 89 58 08 48 89 50 10 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ?", chams::hkOnGeneratePrimitives,
         (void**)&chams::oOnGeneratePrimitives, "scenesystem.dll");
-
-
-    HookVtable(I::input_system, 76, D::hkIsRelativeMouseMode, (void**)&D::oIsRelativeMouseMode, "inputsystem.dll");
-    
-    uintptr_t presentAddr = D::GetPresentAddress();
-    if (!presentAddr) {
-        std::cout << "[-] Failed to get Present address" << std::endl;
-        return false;
-    }
-
-    if (!HookAddress(presentAddr, D::hkPresent, reinterpret_cast<LPVOID*>(&D::g_pOriginalPresent))) {
-        std::cout << "[-] Failed to hook Present" << std::endl;
-        return false;
-    }
-
-    uintptr_t resisebuff = D::GetResizeBuffersAddress();
-    if (!resisebuff)
-    {
-        std::cout << "[-] Failed to get resize buffer address" << std::endl;
-        return false;
-    }
-
-    if (!HookAddress(resisebuff, D::hkResizeBuffers, reinterpret_cast<LPVOID*>(&D::g_pResizeBuffers)))
-    {
-        std::cout << "[-] Failed to hook resize buffer" << std::endl;
-        return false;
-    }
-
+    HookVtable(I::input_system, 76, D::hkIsRelativeMouseMode, 
+        (void**)&D::oIsRelativeMouseMode, "inputsystem.dll");
+    Hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 41 8B E8", D::hkPresent,
+        (void**)&D::g_pOriginalPresent, "GameOverlayRenderer64.dll");
+    Hook("40 53 55 56 57 41 54 41 56 41 57 48 83 EC ? 44 8B E2", D::hkResizeBuffers,
+        (void**)&D::g_pResizeBuffers, "GameOverlayRenderer64.dll");
 
     std::cout << "[+] All hooks installed successfully!" << std::endl;
     return true;

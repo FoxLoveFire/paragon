@@ -22,6 +22,7 @@ namespace G
 		int m_exposure = 0;
 
 		float in = 0;
+		c_color skybox_color = c_color(0, 255, 0);
 	};
 
 	inline WorldModulation_t world = WorldModulation_t();
