@@ -74,38 +74,48 @@ inline bool Dropdown(const char* label, int* sel, const char** items, int count,
 inline void RenderOpenDropdown() {
     if (_dd::open_id == 0) return;
 
-    ImDrawList* fdl    = ImGui::GetForegroundDrawList();
     const float item_h = 16.0f;
     float       total  = (float)_dd::count * item_h + 4.0f;
     ImVec2      p0     = _dd::open_pos;
     ImVec2      p1     = ImVec2(p0.x + _dd::open_w, p0.y + total);
     ImVec2      mouse  = ImGui::GetIO().MousePos;
 
-    fdl->AddRectFilled(ImVec2(p0.x + 2, p0.y + 2), ImVec2(p1.x + 2, p1.y + 2),
-                       IM_COL32(0, 0, 0, 60), 3.0f);
-    fdl->AddRectFilled(p0, p1, Colors::Bg, 3.0f);
+    ImGui::SetNextWindowPos(p0);
+    ImGui::SetNextWindowSize(ImVec2(_dd::open_w, total));
+    
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+
+    ImGui::Begin("##dd_popup", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoFocusOnAppearing);
+
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+
+    dl->AddRectFilled(ImVec2(p0.x + 2, p0.y + 2), ImVec2(p1.x + 2, p1.y + 2), IM_COL32(0, 0, 0, 60), 3.0f);
+    dl->AddRectFilled(p0, p1, Colors::Bg, 3.0f);
 
     int  click_sel  = -1;
 
-    bool click_any  = ImGui::IsMouseClicked(ImGuiMouseButton_Left)
-                   && (ImGui::GetFrameCount() > _dd::open_frame);
+    bool click_any  = ImGui::IsMouseClicked(ImGuiMouseButton_Left) && (ImGui::GetFrameCount() > _dd::open_frame);
 
     for (int i = 0; i < _dd::count; i++) {
         ImVec2 ip0 = ImVec2(p0.x + 1.0f, p0.y + 2.0f + (float)i * item_h);
         ImVec2 ip1 = ImVec2(p1.x - 1.0f, ip0.y + item_h);
 
-        bool hov_i = (mouse.x >= ip0.x && mouse.x <= ip1.x &&
-                      mouse.y >= ip0.y && mouse.y <= ip1.y);
+        bool hov_i = (mouse.x >= ip0.x && mouse.x <= ip1.x && mouse.y >= ip0.y && mouse.y <= ip1.y);
         bool sel_i = (*_dd::selected == i);
 
-        if (hov_i) fdl->AddRectFilled(ip0, ip1, IM_COL32(35, 32, 44, 255), 2.0f);
+        if (hov_i) dl->AddRectFilled(ip0, ip1, IM_COL32(35, 32, 44, 255), 2.0f);
 
         float ty = ip0.y + (item_h - ImGui::GetTextLineHeight()) * 0.5f;
         ImU32 tc = sel_i ? Colors::Accent : (hov_i ? Colors::TextBright : Colors::Text);
-        fdl->AddText(ImVec2(ip0.x + 7.0f, ty), tc, _dd::items[i]);
+        dl->AddText(ImVec2(ip0.x + 7.0f, ty), tc, _dd::items[i]);
 
         if (hov_i && click_any) click_sel = i;
     }
+
+    ImGui::End();
+    ImGui::PopStyleVar(3);
 
     if (click_sel >= 0) {
         *_dd::selected = click_sel;
@@ -114,8 +124,7 @@ inline void RenderOpenDropdown() {
     }
 
     if (click_any) {
-        bool inside = (mouse.x >= p0.x && mouse.x <= p1.x &&
-                       mouse.y >= p0.y && mouse.y <= p1.y);
+        bool inside = (mouse.x >= p0.x && mouse.x <= p1.x && mouse.y >= p0.y && mouse.y <= p1.y);
         if (!inside) _dd::open_id = 0;
     }
 }

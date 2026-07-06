@@ -80,7 +80,7 @@ bool Hook::initialize()
         (void**)&Removals::oDrawSmoke, "client.dll");
     Hook("48 8B C4 53 57 48 83 EC ? 48 8B FA", Removals::hkDrawScopeOverlay,
         (void**)&Removals::oDrawScopeOverlay, "client.dll");
-    Hook("40 55 53 56 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? F2 0F 10 42", Removals::oDrawLegs,
+    Hook("40 55 53 56 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? F2 0F 10 42", Removals::hkDrawLegs,
         (void**)&Removals::oDrawLegs, "client.dll");
     Hook("85 D2 0F 88 ? ? ? ? 48 89 4C 24", Removals::hkFlashbangOverlay,
         (void**)&Removals::oFlashbangOverlay, "client.dll");

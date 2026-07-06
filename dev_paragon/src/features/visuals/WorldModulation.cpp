@@ -1,14 +1,42 @@
 #include "WorldModulation.h"
+#include <unordered_map>
+
+struct LightColor_t {
+    float r, g, b;
+};
+
+struct SkyboxData_t {
+    float r, g, b;
+    float in_val;
+};
+
+static std::unordered_map<void*, LightColor_t> saved_lights;
+static std::unordered_map<void*, SkyboxData_t> saved_skyboxes;
 
 void WorldModulation::hkDrawArrayLight(__int64 var1, CSceneLightObject* pSceneLight, __int64 var3)
 {
-    if (G::world.custom_light)
+    if (pSceneLight)
     {
-        if (pSceneLight)
+        if (G::world.custom_light)
         {
+            if (saved_lights.find(pSceneLight) == saved_lights.end())
+            {
+                saved_lights[pSceneLight] = { pSceneLight->desc.colorR, pSceneLight->desc.colorG, pSceneLight->desc.colorB };
+            }
             pSceneLight->desc.colorR = G::world.light_color.r();
             pSceneLight->desc.colorG = G::world.light_color.g();
             pSceneLight->desc.colorB = G::world.light_color.b();
+        }
+        else
+        {
+            auto it = saved_lights.find(pSceneLight);
+            if (it != saved_lights.end())
+            {
+                pSceneLight->desc.colorR = it->second.r;
+                pSceneLight->desc.colorG = it->second.g;
+                pSceneLight->desc.colorB = it->second.b;
+                saved_lights.erase(it);
+            }
         }
     }
     if (oDrawArrayLight)
@@ -44,16 +72,36 @@ void __fastcall WorldModulation::hkSkyboxArray(__int64 ecx, __int64 render, __in
     if (nCount > 0 && nCount < 100 && primitive)
     {
         uintptr_t skybox_ptr_address = primitive + (static_cast<size_t>(nCount) * 0x68) - 0x50;
-
         if (auto* const skybox_obj = *reinterpret_cast<void**>(skybox_ptr_address))
         {
-            auto* const color = reinterpret_cast<float*>(static_cast<char*>(skybox_obj) + 0xE8);
-            color[0] = 255.0f;
-            color[1] = 0.0f;
-            color[2] = 0.0f;
-            *reinterpret_cast<float*>(static_cast<char*>(skybox_obj) + 0xF0) = G::world.in;
+            if (auto* const color = reinterpret_cast<float*>(static_cast<char*>(skybox_obj) + 0xE8))
+            {
+                auto* in_ptr = reinterpret_cast<float*>(static_cast<char*>(skybox_obj) + 0xF0);
+                if (G::world.custom_skybox)
+                {
+                    if (saved_skyboxes.find(skybox_obj) == saved_skyboxes.end())
+                    {
+                        saved_skyboxes[skybox_obj] = { color[0], color[1], color[2], *in_ptr };
+                    }
+                    color[0] = G::world.skybox_color.r() / 255.0f;
+                    color[1] = G::world.skybox_color.g() / 255.0f;
+                    color[2] = G::world.skybox_color.b() / 255.0f;
+                    *in_ptr = G::world.in;
+                }
+                else
+                {
+                    auto it = saved_skyboxes.find(skybox_obj);
+                    if (it != saved_skyboxes.end())
+                    {
+                        color[0] = it->second.r;
+                        color[1] = it->second.g;
+                        color[2] = it->second.b;
+                        *in_ptr = it->second.in_val;
+                        saved_skyboxes.erase(it);
+                    }
+                }
+            }
         }
-
     }
     oSkyboxArray(ecx, render, primitive, nCount, RenderFlag, view_info, render_stats);
 }

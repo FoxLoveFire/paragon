@@ -1,6 +1,5 @@
 #include "dx11hook.h"
 
-
 ID3D11Device* D::g_pDevice = nullptr;
 ID3D11DeviceContext* D::g_pContext = nullptr;
 ID3D11RenderTargetView* D::g_pRenderTargetView = nullptr;
@@ -20,7 +19,6 @@ namespace D
 {
     LRESULT CALLBACK WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-
         if (uMsg == WM_KEYDOWN && wParam == VK_INSERT)
         {
             G::menu.show = !G::menu.show;
@@ -33,9 +31,7 @@ namespace D
                 if (I::engine_client->is_in_game())
                 {
                     ShowCursor(FALSE);
-
                     oIsRelativeMouseMode(I::input_system, true);
-
                     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
                     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
                     SetCursorPos(screenWidth / 2, screenHeight / 2);
@@ -58,7 +54,6 @@ namespace D
                 return 1L;
             }
 
-
             const ImGuiIO& io = ImGui::GetIO();
             if (io.WantCaptureKeyboard) {
                 switch (uMsg) {
@@ -76,8 +71,7 @@ namespace D
     HRESULT WINAPI hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
     {
         if (!g_bInitialized) {
-            if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device),
-                reinterpret_cast<void**>(&g_pDevice)))) {
+            if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), reinterpret_cast<void**>(&g_pDevice)))) {
                 g_pDevice->GetImmediateContext(&g_pContext);
 
                 DXGI_SWAP_CHAIN_DESC desc{};
@@ -85,8 +79,7 @@ namespace D
                 g_hWindow = desc.OutputWindow;
 
                 ComPtr<ID3D11Texture2D> pBackBuffer;
-                if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-                    pBackBuffer.GetVoidAddressOf()))) {
+                if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.GetVoidAddressOf()))) {
                     g_pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &g_pRenderTargetView);
                 }
 
@@ -98,24 +91,21 @@ namespace D
                 ImGui_ImplWin32_Init(g_hWindow);
                 ImGui_ImplDX11_Init(g_pDevice, g_pContext);
 
-                g_pOriginalWndProc = reinterpret_cast<WNDPROC>(
-                    SetWindowLongPtr(g_hWindow, GWLP_WNDPROC,
-                        reinterpret_cast<LONG_PTR>(WndProcHandler))
-                    );
+                Menu::Initialize();
 
+                g_pOriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(g_hWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProcHandler)));
                 g_bInitialized = true;
             }
         }
 
         if (!g_pRenderTargetView) {
             ComPtr<ID3D11Texture2D> pBackBuffer;
-            if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-                pBackBuffer.GetVoidAddressOf()))) {
+            if (SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.GetVoidAddressOf()))) {
                 g_pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &g_pRenderTargetView);
             }
         }
 
-        if (G::menu.show && g_pRenderTargetView && g_pContext) {
+        if (g_pRenderTargetView && g_pContext) {
             ComPtr<ID3D11RenderTargetView> pOldRTV;
             ComPtr<ID3D11DepthStencilView> pOldDSV;
             g_pContext->OMGetRenderTargets(1, pOldRTV.GetAddressOf(), pOldDSV.GetAddressOf());
@@ -128,15 +118,11 @@ namespace D
 
             ImGui_ImplDX11_NewFrame();
             ImGui_ImplWin32_NewFrame();
+            ImGui::NewFrame();
 
-        /*  здеся проверка схемы
-            C_CSPlayerPawn* local_player = Hook::oGetLocalPlayer(0);
-            if (local_player)
-            {
-                std::cout << local_player->m_iHealth() << std::endl;
+            if (G::menu.show) {
+                Menu::Render();
             }
-        */
-            Menu::Render();
 
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -190,14 +176,7 @@ namespace D
         ComPtr<ID3D11Device> pDummyDevice;
         ComPtr<ID3D11DeviceContext> pDummyContext;
 
-        if (FAILED(D3D11CreateDeviceAndSwapChain(
-            nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0,
-            featureLevels, 1, D3D11_SDK_VERSION, &scDesc,
-            pDummySwapChain.GetAddressOf(),
-            pDummyDevice.GetAddressOf(),
-            nullptr,
-            pDummyContext.GetAddressOf()
-        ))) {
+        if (FAILED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, featureLevels, 1, D3D11_SDK_VERSION, &scDesc, pDummySwapChain.GetAddressOf(), pDummyDevice.GetAddressOf(), nullptr, pDummyContext.GetAddressOf()))) {
             return 0;
         }
 
@@ -224,14 +203,7 @@ namespace D
         ComPtr<ID3D11Device> pDummyDevice;
         ComPtr<ID3D11DeviceContext> pDummyContext;
 
-        if (FAILED(D3D11CreateDeviceAndSwapChain(
-            nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0,
-            featureLevels, 1, D3D11_SDK_VERSION, &scDesc,
-            pDummySwapChain.GetAddressOf(),
-            pDummyDevice.GetAddressOf(),
-            nullptr,
-            pDummyContext.GetAddressOf()
-        ))) {
+        if (FAILED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, featureLevels, 1, D3D11_SDK_VERSION, &scDesc, pDummySwapChain.GetAddressOf(), pDummyDevice.GetAddressOf(), nullptr, pDummyContext.GetAddressOf()))) {
             return 0;
         }
 
@@ -239,9 +211,7 @@ namespace D
 
         if (!pVTable[13]) {
             for (int i = 0; i < 20; i++) {
-                if (pVTable[i]) {
-                    return 0;
-                }
+                if (pVTable[i]) return 0;
             }
             return 0;
         }
@@ -258,8 +228,7 @@ namespace D
         ImGui::DestroyContext();
 
         if (g_hWindow && g_pOriginalWndProc) {
-            SetWindowLongPtr(g_hWindow, GWLP_WNDPROC,
-                reinterpret_cast<LONG_PTR>(g_pOriginalWndProc));
+            SetWindowLongPtr(g_hWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(g_pOriginalWndProc));
             g_pOriginalWndProc = nullptr;
             g_hWindow = nullptr;
         }
@@ -284,17 +253,13 @@ namespace D
 
     bool __fastcall hkIsRelativeMouseMode(void* ecx, bool enable)
     {
-        if (G::menu.show)
-            return oIsRelativeMouseMode(ecx, false);
-
+        if (G::menu.show) return oIsRelativeMouseMode(ecx, false);
         return oIsRelativeMouseMode(ecx, enable);
     }
 
     bool __fastcall hkMouseInputEnabled(void* ecx)
     {
-        if (G::menu.show)
-            return false;
-
+        if (G::menu.show) return false;
         return oMouseInputEnabled(ecx);
     }
 }

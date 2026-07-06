@@ -38,6 +38,7 @@
     <ClInclude Include="external\minhook\src\hde\table32.h" />
     <ClInclude Include="external\minhook\src\hde\table64.h" />
     <ClInclude Include="external\minhook\src\trampoline.h" />
+    <ClInclude Include="external\nlohmann\single_include\nlohmann\json.hpp" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="src\sdk\cs2\datatypes\schema\ISchemaClass\ISchemaClass.h" />
     <ClInclude Include="src\sdk\menu\elements\bind.h" />
@@ -53,6 +54,7 @@
     <ClInclude Include="src\sdk\menu\elements\textinput.h" />
     <ClInclude Include="src\sdk\menu\elements\utils.h" />
     <ClInclude Include="src\sdk\menu\menu.h" />
+    <ClInclude Include="src\sdk\menu\menu_layout.h" />
     <ClInclude Include="src\sdk\utils\schema\schema.h" />
     <ClInclude Include="src\features\visuals\Removals.h" />
     <ClInclude Include="src\features\viewport\OverrideView.h" />

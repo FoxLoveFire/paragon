@@ -10,15 +10,17 @@ namespace _cp {
     inline ImGuiID open_id = 0;
     inline ImVec2  open_pos = {};
     inline ImVec4* editing_color = nullptr;
+    inline float*  editing_intensity = nullptr;
     inline float   hue = 0.0f;
     inline float   sat = 1.0f;
     inline float   val = 1.0f;
     inline float   alpha = 1.0f;
+    inline float   intensity = 1.0f;
     inline ImVec2  menu_pos_when_opened = {};
     inline bool    dragging_inside = false;
 }
 
-inline bool ColorPicker(const char* label, ImVec4* color, float right_edge, float offset_from_right = 0.0f) {
+inline bool ColorPicker(const char* label, ImVec4* color, float right_edge, float offset_from_right = 0.0f, float* intensity = nullptr) {
     ImDrawList* dl = ImGui::GetWindowDrawList();
     ImVec2 cursor_pos = ImGui::GetCursorScreenPos();
 
@@ -43,6 +45,10 @@ inline bool ColorPicker(const char* label, ImVec4* color, float right_edge, floa
             _cp::open_id = my_id;
             _cp::open_pos = ImVec2(pos.x + picker_w * 0.5f, pos.y + picker_h * 0.5f);
             _cp::editing_color = color;
+            _cp::editing_intensity = intensity;
+            if (intensity != nullptr) {
+                _cp::intensity = *intensity;
+            }
             _cp::menu_pos_when_opened = ImGui::GetWindowPos();
 
             ImGui::ColorConvertRGBtoHSV(color->x, color->y, color->z, _cp::hue, _cp::sat, _cp::val);
@@ -88,8 +94,9 @@ inline void RenderOpenColorPicker() {
     }
 
     ImDrawList* fdl = ImGui::GetForegroundDrawList();
+    bool has_intensity = (_cp::editing_intensity != nullptr);
     const float picker_w = 220.0f;
-    const float picker_h = 220.0f;
+    const float picker_h = has_intensity ? 242.0f : 220.0f;
     const float sv_size = 180.0f;
     const float hue_w = 14.0f;
     const float alpha_h = 14.0f;
@@ -235,6 +242,48 @@ inline void RenderOpenColorPicker() {
         ImVec2(alpha_cursor_x - 2, alpha_pos.y - 2),
         ImVec2(alpha_cursor_x + 2, alpha_end.y + 2),
         IM_COL32(0, 0, 0, 255), 1.0f, 0, 1.5f);
+
+    if (has_intensity) {
+        ImVec2 int_pos = ImVec2(sv_pos.x, alpha_end.y + gap);
+        ImVec2 int_end = ImVec2(sv_end.x, int_pos.y + alpha_h);
+
+        fdl->AddRectFilledMultiColor(int_pos, int_end,
+            IM_COL32(20, 20, 20, 255), IM_COL32(255, 255, 255, 255),
+            IM_COL32(255, 255, 255, 255), IM_COL32(20, 20, 20, 255));
+
+        bool int_hov = (mouse.x >= int_pos.x && mouse.x <= int_end.x &&
+                        mouse.y >= int_pos.y && mouse.y <= int_end.y);
+
+        const float MAX_INTENSITY = 1.0f; // <--- Уменьшено до 1.0f
+
+        if (int_hov && mouse_down) {
+            _cp::intensity = ImClamp((mouse.x - int_pos.x) / sv_size, 0.0f, 1.0f) * MAX_INTENSITY;
+            if (_cp::editing_intensity != nullptr) {
+                *_cp::editing_intensity = _cp::intensity;
+            }
+        }
+
+        float draw_intensity = ImClamp(_cp::intensity, 0.0f, MAX_INTENSITY);
+        float int_cursor_x = int_pos.x + (draw_intensity / MAX_INTENSITY) * sv_size;
+
+        fdl->AddRectFilled(
+            ImVec2(int_cursor_x - 2, int_pos.y - 2),
+            ImVec2(int_cursor_x + 2, int_end.y + 2),
+            IM_COL32(255, 255, 255, 255), 1.0f);
+        fdl->AddRect(
+            ImVec2(int_cursor_x - 2, int_pos.y - 2),
+            ImVec2(int_cursor_x + 2, int_end.y + 2),
+            IM_COL32(0, 0, 0, 255), 1.0f, 0, 1.5f);
+
+        char buf[32];
+        snprintf(buf, sizeof(buf), "Intensity: %.2f", _cp::intensity); // <--- Изменено на %.2f
+        ImVec2 ts = ImGui::CalcTextSize(buf);
+        float tx = int_pos.x + (sv_size - ts.x) * 0.5f;
+        float ty = int_pos.y + (alpha_h - ImGui::GetTextLineHeight()) * 0.5f;
+
+        fdl->AddText(ImVec2(tx + 1, ty + 1), IM_COL32(0, 0, 0, 255), buf);
+        fdl->AddText(ImVec2(tx, ty), IM_COL32(255, 255, 255, 255), buf);
+    }
 }
 
 }
