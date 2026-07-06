@@ -136,6 +136,7 @@ namespace D
                 std::cout << local_player->m_iHealth() << std::endl;
             }
         */
+            ImGui::NewFrame();
             Menu::Render();
 
             ImGui::Render();

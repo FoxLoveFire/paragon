@@ -3,6 +3,7 @@
 #include "engine.h"
 #include "c_scene_object.h"
 #include "../cs2/datatypes/schema/ISchemaClass/ISchemaClass.h"
+#include "../memory/memory.h"
 
 namespace I
 {

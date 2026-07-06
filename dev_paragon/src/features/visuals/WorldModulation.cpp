@@ -48,9 +48,9 @@ void __fastcall WorldModulation::hkSkyboxArray(__int64 ecx, __int64 render, __in
         if (auto* const skybox_obj = *reinterpret_cast<void**>(skybox_ptr_address))
         {
             auto* const color = reinterpret_cast<float*>(static_cast<char*>(skybox_obj) + 0xE8);
-            color[0] = 255.0f;
-            color[1] = 0.0f;
-            color[2] = 0.0f;
+            color[0] = G::world.skybox_color.r();
+            color[1] = G::world.skybox_color.g();
+            color[2] = G::world.skybox_color.b();
             *reinterpret_cast<float*>(static_cast<char*>(skybox_obj) + 0xF0) = G::world.in;
         }
 

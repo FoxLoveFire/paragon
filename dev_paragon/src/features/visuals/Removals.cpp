@@ -13,7 +13,7 @@ __int64 __fastcall Removals::hkDrawScopeOverlay(__int64 a1, __int64 a2)
 	if (G::removals.disable_scopeoverlay)
 		return 0;
 
-	return 0;
+	return oDrawScopeOverlay(a1, a2);
 }
 
 void __fastcall Removals::hkDrawLegs(__int64* a1, __int64* a2, __int64 a3, __int64 a4, __int64 a5)
