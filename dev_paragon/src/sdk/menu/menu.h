@@ -17,6 +17,7 @@ namespace Menu {
         int i = 0;
         ImVec4 c = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
         float i_c = 1.0f;
+        std::string s = "";
     };
 
     extern std::unordered_map<std::string, ConfigValue> cfg;

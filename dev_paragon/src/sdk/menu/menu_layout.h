@@ -8,8 +8,6 @@ inline const std::string json_layout = R"(
     {
       "name": "visuals",
       "subtabs": [
-        { "name": "enemy" },
-        { "name": "friendly" },
         {
           "name": "world",
           "right": [
@@ -48,6 +46,9 @@ inline const std::string json_layout = R"(
             {
               "name": "hud",
               "elements": [
+                { "type": "checkbox", "id": "watermark", "label": "watermark", "color": "watermark_color", "default": true },
+                { "type": "multidropdown", "id": "watermark_options", "label": "options", "items": ["name", "ping", "time", "sync color"], "condition": "watermark", "default": 15 },
+                { "type": "dropdown", "id": "watermark_name_source", "label": "name source", "items": ["loader", "steam"], "condition": "watermark", "default": 0 },
                 { "type": "checkbox", "id": "radar_hack", "label": "radar hack" }
               ]
             }
@@ -55,9 +56,36 @@ inline const std::string json_layout = R"(
         }
       ]
     },
+    { "name": "players" },
     { "name": "skins" },
     { "name": "misc" },
-    { "name": "config" },
+    { 
+      "name": "config",
+      "subtabs": [
+        {
+          "name": "main",
+          "left": [
+            {
+              "name": "settings",
+              "elements": [
+                { "type": "colorpicker", "id": "menu_color", "label": "menu color", "color": "menu_color", "default_color": [0.686, 0.392, 0.784, 1.0] },
+                { "type": "checkbox", "id": "keybinds_list", "label": "keybinds list" },
+                { "type": "checkbox", "id": "spectator_list", "label": "spectator list" },
+                { "type": "overlay_image", "id": "custom_overlay", "label": "overlay image" }
+              ]
+            }
+          ],
+          "right": [
+            {
+              "name": "configs",
+              "elements": [
+                { "type": "config_list", "id": "cfg_sys" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
     { "name": "lua" }
   ]
 }

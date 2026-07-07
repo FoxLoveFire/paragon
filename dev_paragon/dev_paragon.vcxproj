@@ -19,12 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\features\misc\settings\steam_api.h" />
     <ClInclude Include="src\sdk\cs2\datatypes\C_Material\C_Material.h" />
     <ClInclude Include="src\sdk\utils\CStrongHandle\CStrongHandle.h" />
     <ClInclude Include="src\sdk\utils\keyvalues\keyvalues.h" />
     <ClInclude Include="src\sdk\utils\cutlbuffer\cutlbuffer.h" />
     <ClInclude Include="src\features\chams\chams.h" />
     <ClInclude Include="src\features\misc\radarhack\radarhack.h" />
+    <ClInclude Include="src\features\misc\settings\image_overlay.h" />
+    <ClInclude Include="src\features\misc\settings\watermark.h" />
     <ClInclude Include="src\sdk\cs2\classes\C_CSPlayerPawn\C_CSPlayerPawn.h" />
     <ClInclude Include="external\imgui\imconfig.h" />
     <ClInclude Include="external\imgui\imgui.h" />
@@ -89,6 +92,8 @@
     <ClCompile Include="src\sdk\utils\cutlbuffer\cutlbuffer.cpp" />
     <ClCompile Include="src\features\chams\chams.cpp" />
     <ClCompile Include="src\features\misc\radarhack\radarhack.cpp" />
+    <ClCompile Include="src\features\misc\settings\image_overlay.cpp" />
+    <ClCompile Include="src\features\misc\settings\watermark.cpp" />
     <ClCompile Include="src\sdk\cs2\classes\C_CSPlayerPawn\C_CSPlayerPawn.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="external\imgui\imgui.cpp" />

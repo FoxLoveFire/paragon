@@ -3,6 +3,7 @@
 #include "../../../../external/imgui/imgui_internal.h"
 #include "colors.h"
 #include <string>
+#include <vector>
 
 namespace UI {
 
@@ -11,9 +12,9 @@ namespace _dd {
     inline int          open_frame = -1;
     inline ImVec2       open_pos   = {};
     inline float        open_w     = 0.f;
-    inline const char** items      = nullptr;
     inline int          count      = 0;
-    inline int*         selected   = nullptr;
+    inline int* selected   = nullptr;
+    inline std::vector<std::string> persistent_items;
 }
 
 inline bool Dropdown(const char* label, int* sel, const char** items, int count, float col_w = -1.f) {
@@ -38,7 +39,12 @@ inline bool Dropdown(const char* label, int* sel, const char** items, int count,
             _dd::open_frame = ImGui::GetFrameCount();
             _dd::open_pos   = ImVec2(pos.x, pos.y + h);
             _dd::open_w     = w;
-            _dd::items      = items;
+            
+            _dd::persistent_items.clear();
+            for (int i = 0; i < count; i++) {
+                _dd::persistent_items.push_back(items[i] ? items[i] : "");
+            }
+            
             _dd::count      = count;
             _dd::selected   = sel;
         }
@@ -95,7 +101,6 @@ inline void RenderOpenDropdown() {
     dl->AddRectFilled(p0, p1, Colors::Bg, 3.0f);
 
     int  click_sel  = -1;
-
     bool click_any  = ImGui::IsMouseClicked(ImGuiMouseButton_Left) && (ImGui::GetFrameCount() > _dd::open_frame);
 
     for (int i = 0; i < _dd::count; i++) {
@@ -109,7 +114,7 @@ inline void RenderOpenDropdown() {
 
         float ty = ip0.y + (item_h - ImGui::GetTextLineHeight()) * 0.5f;
         ImU32 tc = sel_i ? Colors::Accent : (hov_i ? Colors::TextBright : Colors::Text);
-        dl->AddText(ImVec2(ip0.x + 7.0f, ty), tc, _dd::items[i]);
+        dl->AddText(ImVec2(ip0.x + 7.0f, ty), tc, _dd::persistent_items[i].c_str());
 
         if (hov_i && click_any) click_sel = i;
     }

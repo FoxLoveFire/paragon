@@ -34,15 +34,52 @@ inline bool TextInput(const char* id, char* buf, int buf_size, float w, float h 
         int len = (int)strlen(buf);
 
         if (ImGui::IsKeyPressed(ImGuiKey_Backspace) && len > 0) {
-            buf[--len] = '\0';
+            while (len > 0) {
+                len--;
+                if ((buf[len] & 0xC0) != 0x80)
+                    break;
+            }
+            buf[len] = '\0';
             changed = true;
         }
+
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V)) {
+            if (const char* clip = ImGui::GetClipboardText()) {
+                while (*clip && len < buf_size - 1) {
+                    buf[len++] = *clip++;
+                }
+                buf[len] = '\0';
+                changed = true;
+            }
+        }
+
         for (int i = 0; i < io.InputQueueCharacters.Size; i++) {
             ImWchar c = io.InputQueueCharacters[i];
-            if (c < 32 || len >= buf_size - 1) continue;
-            buf[len++] = (char)c;
-            buf[len]   = '\0';
-            changed    = true;
+            if (c < 32) continue;
+
+            char char_buf[4];
+            int bytes = 0;
+            if (c < 0x80) {
+                char_buf[0] = (char)c;
+                bytes = 1;
+            } else if (c < 0x800) {
+                char_buf[0] = (char)(0xC0 + (c >> 6));
+                char_buf[1] = (char)(0x80 + (c & 0x3F));
+                bytes = 2;
+            } else if (c < 0x10000) {
+                char_buf[0] = (char)(0xE0 + (c >> 12));
+                char_buf[1] = (char)(0x80 + ((c >> 6) & 0x3F));
+                char_buf[2] = (char)(0x80 + (c & 0x3F));
+                bytes = 3;
+            }
+
+            if (len + bytes < buf_size) {
+                for (int b = 0; b < bytes; b++) {
+                    buf[len++] = char_buf[b];
+                }
+                buf[len] = '\0';
+                changed = true;
+            }
         }
         if (changed) io.InputQueueCharacters.resize(0);
     }
@@ -58,6 +95,9 @@ inline bool TextInput(const char* id, char* buf, int buf_size, float w, float h 
 
     int   len  = (int)strlen(buf);
     float ty   = pos.y + (h - ImGui::GetTextLineHeight()) * 0.5f;
+    
+    ImGui::PushClipRect(ImVec2(pos.x + 2.0f, pos.y), ImVec2(p1.x - 2.0f, p1.y), true);
+    
     if (len > 0)
         dl->AddText(ImVec2(pos.x + 6.0f, ty), Colors::TextBright, buf);
     else if (!focused)
@@ -69,6 +109,8 @@ inline bool TextInput(const char* id, char* buf, int buf_size, float w, float h 
         dl->AddLine(ImVec2(cx, ty), ImVec2(cx, ty + ImGui::GetTextLineHeight()),
                     Colors::TextBright, 1.0f);
     }
+    
+    ImGui::PopClipRect();
 
     return changed;
 }

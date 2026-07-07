@@ -1,4 +1,5 @@
 #include "dx11hook.h"
+#include "../features/misc/settings/watermark.h"
 
 ID3D11Device* D::g_pDevice = nullptr;
 ID3D11DeviceContext* D::g_pContext = nullptr;
@@ -119,6 +120,8 @@ namespace D
             ImGui_ImplDX11_NewFrame();
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
+
+            Settings::Watermark::Render();
 
             if (G::menu.show) {
                 Menu::Render();

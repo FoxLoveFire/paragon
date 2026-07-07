@@ -20,8 +20,6 @@ namespace G
         c_color wall_color = c_color(0, 255, 0);
 
         int m_exposure = 0;
-
-        float in = 0;
         
         bool custom_skybox = false;
         c_color skybox_color = c_color(255, 255, 255);

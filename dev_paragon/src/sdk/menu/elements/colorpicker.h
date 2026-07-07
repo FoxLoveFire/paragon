@@ -10,7 +10,7 @@ namespace _cp {
     inline ImGuiID open_id = 0;
     inline ImVec2  open_pos = {};
     inline ImVec4* editing_color = nullptr;
-    inline float*  editing_intensity = nullptr;
+    inline float* editing_intensity = nullptr;
     inline float   hue = 0.0f;
     inline float   sat = 1.0f;
     inline float   val = 1.0f;
@@ -61,7 +61,7 @@ inline bool ColorPicker(const char* label, ImVec4* color, float right_edge, floa
     dl->AddRectFilled(pos, p1, IM_COL32(16, 16, 16, 255), 2.0f);
 
     ImU32 col_tl = ImGui::ColorConvertFloat4ToU32(*color);
-    ImVec4 darker = ImVec4(color->x * 0.5f, color->y * 0.5f, color->z * 0.5f, 1.0f);
+    ImVec4 darker = ImVec4(color->x * 0.5f, color->y * 0.5f, color->z * 0.5f, color->w);
     ImU32 col_br = ImGui::ColorConvertFloat4ToU32(darker);
 
     dl->AddRectFilledMultiColor(
@@ -254,7 +254,7 @@ inline void RenderOpenColorPicker() {
         bool int_hov = (mouse.x >= int_pos.x && mouse.x <= int_end.x &&
                         mouse.y >= int_pos.y && mouse.y <= int_end.y);
 
-        const float MAX_INTENSITY = 1.0f; // <--- Уменьшено до 1.0f
+        const float MAX_INTENSITY = 1.0f;
 
         if (int_hov && mouse_down) {
             _cp::intensity = ImClamp((mouse.x - int_pos.x) / sv_size, 0.0f, 1.0f) * MAX_INTENSITY;
@@ -276,7 +276,7 @@ inline void RenderOpenColorPicker() {
             IM_COL32(0, 0, 0, 255), 1.0f, 0, 1.5f);
 
         char buf[32];
-        snprintf(buf, sizeof(buf), "Intensity: %.2f", _cp::intensity); // <--- Изменено на %.2f
+        snprintf(buf, sizeof(buf), "Intensity: %.2f", _cp::intensity);
         ImVec2 ts = ImGui::CalcTextSize(buf);
         float tx = int_pos.x + (sv_size - ts.x) * 0.5f;
         float ty = int_pos.y + (alpha_h - ImGui::GetTextLineHeight()) * 0.5f;
