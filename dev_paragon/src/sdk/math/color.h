@@ -3,7 +3,7 @@
 #include <array>
 #include <cmath>
 #include <algorithm>
-
+#include <iostream>
 class c_color
 {
 private:
@@ -126,6 +126,13 @@ public:
     {
         u32() = other.u32();
         return *this;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const c_color& other) {
+        os << "R: " << static_cast<int>(other.r())
+            << " G: " << static_cast<int>(other.g())
+            << " B: " << static_cast<int>(other.b());
+        return os;
     }
 
     std::uint32_t& u32()

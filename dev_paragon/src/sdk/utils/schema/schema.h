@@ -4,7 +4,6 @@
 #include "../fnv1a/fnv1a.h"
 #include "../../memory/memory.h"
 #include "../../cs2/datatypes/schema/ISchemaClass/ISchemaClass.h"
-#include "../../Interfaces/Interfaces.h"
 
 #define SCHEMA_ADD_OFFSET(TYPE, NAME, OFFSET)                                                                 \
 	[[nodiscard]] inline std::add_lvalue_reference_t<TYPE> NAME()                                          \
@@ -36,5 +35,5 @@ public:
 namespace SchemaFinder {
 
 	[[nodiscard]] std::uint32_t Get(const uint32_t hashed);
-	[[nodiscard]] std::uint32_t GetExternal(const char* moduleName, const uint32_t HashedClass, const uint32_t HashedFieldName);
+
 }

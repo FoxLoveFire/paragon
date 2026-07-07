@@ -68,11 +68,42 @@ void Material::material_init()
 				g_vColorTint = [9.0, 9.0, 9.0, 9.0]
 			})")
     };
-
-    
 }
 
-__int64 chams::hkOnGeneratePrimitives(__int64 desc, __int64 object, __int64 a3, __int64 render_buf)
+c_color color_invisible = { 255, 0, 0 };
+c_color color_visible = { 0, 255, 0 };
+
+__int64 chams::hkOnGeneratePrimitives(c_animatable_scene_object_desc* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf)
 {
+<<<<<<< HEAD
     return oOnGeneratePrimitives(desc, object, a3, render_buf);
+=======
+    if (!I::engine_client->valid() || !render_buf || render_buf->m_arr_size <= 0)
+        return oOnGeneratePrimitives(desc, object, a3, render_buf);
+
+    __int64 original = oOnGeneratePrimitives(desc, object, a3, render_buf);
+    
+    CBaseHandle render_ent = object->Owner();
+    if (!render_ent.valid())
+        return oOnGeneratePrimitives(desc, object, a3, render_buf);
+
+    if (G::g_chams_config.is_enabled)
+    {
+        for (int i = 0; i < render_buf->m_arr_size; i++)
+        {
+            c_mesh_primitive* mesh_primitives = render_buf->get_primitive(i);
+            if (!mesh_primitives) continue;
+
+            auto entity = I::GameEntity->Instance->Get(render_ent);
+            if (entity->m_iHealth() > 0)
+            {
+                mesh_primitives->m_material = resourceMaterials[ChamsType::BLOOM].mat_invs;
+                mesh_primitives->m_color = color_invisible;
+            }
+        }
+        oOnGeneratePrimitives(desc, object, a3, render_buf);
+    }
+
+    return original;
+>>>>>>> b221dc724324a3d3b2e18c3dbbbcb8b12c99992c
 }

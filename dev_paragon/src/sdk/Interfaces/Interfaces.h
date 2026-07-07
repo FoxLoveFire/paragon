@@ -3,8 +3,10 @@
 #include "engine.h"
 #include "c_scene_object.h"
 #include "../cs2/datatypes/schema/ISchemaClass/ISchemaClass.h"
+#include "CGameEntitySystem/CGameEntitySystem.h"
 #include "../memory/memory.h"
 
+class IGameResourceService;
 namespace I
 {
 	template <typename T = void*>
@@ -22,6 +24,7 @@ namespace I
 	inline c_scene_system* scene_system = nullptr;
 	inline c_engine_pvs* pvs = nullptr;
 	inline ISchemaSystem* schema_system = nullptr;
+	inline IGameResourceService* GameEntity = nullptr;
 	inline void* input_system = nullptr;
 
 	bool initialize();

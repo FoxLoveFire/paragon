@@ -1,13 +1,10 @@
 #include "schema.h"
-#include "schema.h"
 #include <vector>
 #include <algorithm>
 #include <Shlobj.h>
 #include <shlobj_core.h>
-
-
 #include "../fnv1a/fnv1a.h"
-
+#include "../../Interfaces/Interfaces.h"
 
 struct SchemaDumpedData_t
 {

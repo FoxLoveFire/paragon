@@ -45,4 +45,5 @@ namespace Hook
     void shutdown();
 
     inline C_CSPlayerPawn* (__fastcall* oGetLocalPlayer)(int);
+    inline void* (__fastcall* ogGetBaseEntity)(void*, int);
 }
