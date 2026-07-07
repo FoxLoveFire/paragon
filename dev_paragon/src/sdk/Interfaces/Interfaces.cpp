@@ -41,5 +41,13 @@ bool I::initialize()
 		return false;
 	}
 
+	std::string entity_str = "GameResourceServiceClientV001";
+	GameEntity = find_interface<IGameResourceService*>(GetModuleHandleA("engine2.dll"), entity_str.c_str());
+	if (!GameEntity)
+	{
+		std::cout << "GameEntity is not initialized!" << std::endl;
+		return false;
+	}
+
 	return true;
 }

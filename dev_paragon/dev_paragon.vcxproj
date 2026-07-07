@@ -19,6 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\sdk\Interfaces\CGameEntitySystem\CGameEntitySystem.h" />
+    <ClInclude Include="src\sdk\cs2\classes\CCSPlayerController\CCSPlayerController.h" />
+    <ClInclude Include="src\sdk\cs2\classes\CEntityInstance\CEntityInstance.h" />
+    <ClInclude Include="src\sdk\cs2\classes\C_BaseEntity\C_BaseEntity.h" />
+    <ClInclude Include="src\sdk\utils\CHandle\handle.h" />
     <ClInclude Include="src\sdk\cs2\datatypes\C_Material\C_Material.h" />
     <ClInclude Include="src\sdk\utils\CStrongHandle\CStrongHandle.h" />
     <ClInclude Include="src\sdk\utils\keyvalues\keyvalues.h" />
@@ -83,6 +88,9 @@
     <ClInclude Include="src\sdk\utils\fnv1a\fnv1a.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\sdk\Interfaces\CGameEntitySystem\CGameEntitySystem.cpp" />
+    <ClCompile Include="src\sdk\cs2\classes\CCSPlayerController\CCSPlayerController.cpp" />
+    <ClCompile Include="src\sdk\utils\CHandle\handle.cpp" />
     <ClCompile Include="src\sdk\utils\keyvalues\keyvalues.cpp" />
     <ClCompile Include="src\sdk\utils\cutlbuffer\cutlbuffer.cpp" />
     <ClCompile Include="src\features\chams\chams.cpp" />

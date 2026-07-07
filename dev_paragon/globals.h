@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "src/sdk/math/color.h"
+#include "src/features/chams/chams.h"
 
 namespace G
 {
@@ -61,4 +62,13 @@ namespace G
 	};
 
 	inline Misc_t misc = Misc_t();
+
+    struct ChamsConfig
+	{
+        bool is_enabled = true;
+        c_color color = c_color(0, 255, 0, 255);
+        c_color color_invis = c_color(255, 0, 0, 255);
+    };
+
+    inline ChamsConfig g_chams_config = ChamsConfig();
 }
