@@ -63,23 +63,14 @@ namespace G
         bool rh_enabled = false;
     };
 
-<<<<<<< HEAD
     inline Misc_t misc = Misc_t();
-=======
-	struct Misc_t
-	{
-		bool rh_enabled = false;
-	};
-
-	inline Misc_t misc = Misc_t();
 
     struct ChamsConfig
-	{
+    {
         bool is_enabled = true;
         c_color color = c_color(0, 255, 0, 255);
         c_color color_invis = c_color(255, 0, 0, 255);
     };
 
     inline ChamsConfig g_chams_config = ChamsConfig();
->>>>>>> b221dc724324a3d3b2e18c3dbbbcb8b12c99992c
 }

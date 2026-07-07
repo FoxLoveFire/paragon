@@ -46,7 +46,7 @@ inline const std::string json_layout = R"(
             {
               "name": "hud",
               "elements": [
-                { "type": "checkbox", "id": "watermark", "label": "watermark", "color": "watermark_color", "default": true },
+                { "type": "checkbox", "id": "watermark", "label": "watermark", "color": "watermark_color", "default": false },
                 { "type": "multidropdown", "id": "watermark_options", "label": "options", "items": ["name", "ping", "time", "sync color"], "condition": "watermark", "default": 15 },
                 { "type": "dropdown", "id": "watermark_name_source", "label": "name source", "items": ["loader", "steam"], "condition": "watermark", "default": 0 },
                 { "type": "checkbox", "id": "radar_hack", "label": "radar hack" }

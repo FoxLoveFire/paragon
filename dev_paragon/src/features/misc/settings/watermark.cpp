@@ -34,13 +34,15 @@ namespace Settings {
             int options = Menu::cfg["watermark_options"].i;
             int name_source = Menu::cfg["watermark_name_source"].i;
             
-            std::string name = (name_source == 0) ? "LoaderUser" : GetSteamName();
-            std::string text = "paragon | " + name;
+            std::string text = "paragon";
+
+            if (options & (1 << 0)) {
+                std::string name = (name_source == 0) ? "LoaderUser" : GetSteamName();
+                text += " | " + name;
+            }
 
             int current_ping = 0;
             
-            // зафикси если не пидорас
-
             if (options & (1 << 1)) text += " | " + std::to_string(current_ping) + "ms";
             
             if (options & (1 << 2)) {

@@ -75,9 +75,6 @@ c_color color_visible = { 0, 255, 0 };
 
 __int64 chams::hkOnGeneratePrimitives(c_animatable_scene_object_desc* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf)
 {
-<<<<<<< HEAD
-    return oOnGeneratePrimitives(desc, object, a3, render_buf);
-=======
     if (!I::engine_client->valid() || !render_buf || render_buf->m_arr_size <= 0)
         return oOnGeneratePrimitives(desc, object, a3, render_buf);
 
@@ -105,5 +102,4 @@ __int64 chams::hkOnGeneratePrimitives(c_animatable_scene_object_desc* desc, CSce
     }
 
     return original;
->>>>>>> b221dc724324a3d3b2e18c3dbbbcb8b12c99992c
 }
