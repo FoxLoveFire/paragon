@@ -20,6 +20,7 @@ void __fastcall hkFrameStageNotify(void* a1, int stage)
     case FRAME_NET_UPDATE_END:
         break;
     case FRAME_SIMULATE_END:
+        //ESP::store_players();
         break;
     default:
         break;
@@ -77,7 +78,7 @@ bool Hook::initialize()
         (void**)&OverrideView::oOverrideView, "client.dll");
     Hook("40 55 53 56 41 56 41 57 48 8B EC", Viewmodel::hkViewModel,
         (void**)&Viewmodel::oViewModel, "client.dll");
-    Hook("40 55 41 54 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E2", Removals::hkDrawSmoke,
+    Hook("48 89 54 24 ? 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E2", Removals::hkDrawSmoke,
         (void**)&Removals::oDrawSmoke, "client.dll");
     Hook("48 8B C4 53 57 48 83 EC ? 48 8B FA", Removals::hkDrawScopeOverlay,
         (void**)&Removals::oDrawScopeOverlay, "client.dll");
@@ -89,11 +90,11 @@ bool Hook::initialize()
         (void**)&D::oMouseInputEnabled, "client.dll");
     Hook("48 89 4C 24 ? 55 41 54 48 8D 6C 24", radarhack::hkRadar,
         (void**)&radarhack::oRadar, "client.dll");
-    Hook("40 55 56 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 0D", hkLevelInit,
+    Hook("48 89 74 24 ? 57 48 83 EC ? 48 8B 0D ? ? ? ? 48 8B FA", hkLevelInit,
         (void**)&olevelInit, "client.dll");
     Hook("48 89 5C 24 ? 48 89 6C 24 ? 57 48 83 EC ? 48 8B F9 33 ED", hkFrameStageNotify,
         (void**)&oFrameStageNotify, "client.dll");
-    Hook("48 8B C4 48 89 58 08 48 89 50 10 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ?", chams::hkOnGeneratePrimitives,
+    Hook("48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 56 57 41", chams::hkOnGeneratePrimitives,
         (void**)&chams::oOnGeneratePrimitives, "scenesystem.dll");
     HookVtable(I::input_system, 76, D::hkIsRelativeMouseMode, 
         (void**)&D::oIsRelativeMouseMode, "inputsystem.dll");

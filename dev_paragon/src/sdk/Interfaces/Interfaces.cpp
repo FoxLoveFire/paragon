@@ -49,5 +49,17 @@ bool I::initialize()
 		return false;
 	}
 
+	std::uintptr_t instruction_address = Memory::pattern_scan("48 8B 0D ? ? ? ? 8B 10 E8 ? ? ? ? 45 32 FF", "client.dll");
+
+	if (instruction_address) {
+		std::int32_t rip_offset = *reinterpret_cast<std::int32_t*>(instruction_address + 3);
+		std::uintptr_t client_input_ptr = instruction_address + 7 + rip_offset;
+
+		m_csgo_input = *reinterpret_cast<CCSGOInput**>(client_input_ptr);
+
+		std::cout << "CCSGOInput " << m_csgo_input << std::endl;
+	}
+
+
 	return true;
 }

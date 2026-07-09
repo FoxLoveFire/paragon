@@ -64,10 +64,8 @@ __int64 __fastcall WorldModulation::hkWallColor(__int64 var1, __int64 var2, c_ag
         int index = (var3->data->index + i) << 5;
         auto* wall_color_ptr = reinterpret_cast<c_color*>(static_cast<char*>(I::scene_system->light_data_queue->light_data) + index);
         
-        // Читаем изначальный цвет стены, подготовленный движком
         c_color original_color = *wall_color_ptr;
         
-        // Интерполируем RGB каналы на основе ползунка прозрачности
         *wall_color_ptr = c_color(
             static_cast<int>(original_color.r() * (1.0f - alpha) + G::world.wall_color.r() * alpha),
             static_cast<int>(original_color.g() * (1.0f - alpha) + G::world.wall_color.g() * alpha),

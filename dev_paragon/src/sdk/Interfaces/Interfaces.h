@@ -5,6 +5,7 @@
 #include "../cs2/datatypes/schema/ISchemaClass/ISchemaClass.h"
 #include "CGameEntitySystem/CGameEntitySystem.h"
 #include "../memory/memory.h"
+#include "../../sdk/cs2/datatypes/usercmd/usercmd.h"
 
 class IGameResourceService;
 namespace I
@@ -25,6 +26,7 @@ namespace I
 	inline c_engine_pvs* pvs = nullptr;
 	inline ISchemaSystem* schema_system = nullptr;
 	inline IGameResourceService* GameEntity = nullptr;
+	inline CCSGOInput* m_csgo_input = nullptr;
 	inline void* input_system = nullptr;
 
 	bool initialize();

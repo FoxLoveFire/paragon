@@ -12,7 +12,7 @@ public:
 class c_scene_system
 {
 public:
-    char pad_0000[10792]; //0x0000
+    char pad_0000[7864]; //0x0000
     c_light_data_queue* light_data_queue; //0x2A08
 };
 

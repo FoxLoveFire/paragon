@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <optional>
 #include <array>
+#include "../features/esp/esp.h"
 
 #pragma comment(lib, "d3d11.lib")
 

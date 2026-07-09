@@ -8,6 +8,8 @@
 #include "../../sdk/math/color.h"
 #include "../../sdk/memory/memory.h"
 #include "../../../globals.h"
+#include "../../sdk/hooks.h"
+
 enum ChamsType
 {
 	FLAT,
@@ -61,6 +63,24 @@ public:
 	c_mesh_primitive* get_primitive(int index) {
 		return &m_mesh_primitive_array[index];
 	}
+
+	c_mesh_primitive* alloc_primitive()
+	{
+		//if (this->m_arr_size >= this->m_max_size)
+		//{
+		//	this->m_max_size++;
+		//}
+
+		c_mesh_primitive* new_primitive = this->get_primitive(this->m_arr_size);
+		if (!new_primitive)
+			return nullptr;
+
+		memset(new_primitive, 0, sizeof(c_mesh_primitive));
+		this->m_arr_size++;
+
+		return new_primitive;
+	}
+
 };
 
 class c_animatable_scene_object_desc {

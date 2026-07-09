@@ -22,7 +22,9 @@ vector3d C_CSPlayerPawn::getPosition() const {
 //}
 
 vector3d C_CSPlayerPawn::getEyePosition() const {
-	return vector3d();
+	vector3d view_;
+	Memory::call_vfunc<void, vector3d&>(const_cast<C_CSPlayerPawn*>(this), 170, view_);
+	return view_;
 }
 
 vector3d C_CSPlayerPawn::get_bone_position(int index) const {

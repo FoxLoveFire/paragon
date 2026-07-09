@@ -13,7 +13,7 @@
 #include "../features/misc/radarhack/radarhack.h"
 #include "../features/chams/chams.h"
 #include "../../globals.h"
-#include "../../src/features/chams/chams.h"
+#include "../features/esp/esp.h"
 #include "dx11hook.h"
 #include <string>
 #include <unordered_map>

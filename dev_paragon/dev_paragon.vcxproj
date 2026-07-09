@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\features\esp\esp.h" />
+    <ClInclude Include="src\sdk\cs2\datatypes\usercmd\usercmd.h" />
     <ClInclude Include="src\sdk\Interfaces\CGameEntitySystem\CGameEntitySystem.h" />
     <ClInclude Include="src\sdk\cs2\classes\CCSPlayerController\CCSPlayerController.h" />
     <ClInclude Include="src\sdk\cs2\classes\CEntityInstance\CEntityInstance.h" />
@@ -92,6 +94,7 @@
     <ClInclude Include="src\sdk\utils\fnv1a\fnv1a.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\features\esp\esp.cpp" />
     <ClCompile Include="src\sdk\Interfaces\CGameEntitySystem\CGameEntitySystem.cpp" />
     <ClCompile Include="src\sdk\cs2\classes\CCSPlayerController\CCSPlayerController.cpp" />
     <ClCompile Include="src\sdk\utils\CHandle\handle.cpp" />

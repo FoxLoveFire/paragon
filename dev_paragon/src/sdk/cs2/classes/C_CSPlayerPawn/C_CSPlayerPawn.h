@@ -2,7 +2,7 @@
 #include "../../../utils/schema/schema.h"
 #include "../../../math/vector3d.h"
 #include "../../classes/C_BaseEntity/C_BaseEntity.h"
-
+#include "../../../memory/memory.h"
 enum e_bones {
 	BONE_ORIGIN = 0,
 	BONE_PELVIS = 1,

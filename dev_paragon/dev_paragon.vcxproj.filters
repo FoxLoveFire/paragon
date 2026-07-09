@@ -216,6 +216,9 @@
     <ClInclude Include="src\sdk\Interfaces\CGameEntitySystem\CGameEntitySystem.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\sdk\cs2\datatypes\usercmd\usercmd.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
