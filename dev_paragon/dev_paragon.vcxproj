@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\features\esp\esp.h" />
+    <ClInclude Include="src\features\misc\settings\steam_api.h" />
     <ClInclude Include="src\sdk\cs2\datatypes\usercmd\usercmd.h" />
     <ClInclude Include="src\sdk\Interfaces\CGameEntitySystem\CGameEntitySystem.h" />
     <ClInclude Include="src\sdk\cs2\classes\CCSPlayerController\CCSPlayerController.h" />

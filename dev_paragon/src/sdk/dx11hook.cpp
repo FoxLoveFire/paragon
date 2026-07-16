@@ -1,5 +1,6 @@
 #include "dx11hook.h"
 #include "../features/misc/settings/watermark.h"
+#include "../features/esp/esp.h"
 
 ID3D11Device* D::g_pDevice = nullptr;
 ID3D11DeviceContext* D::g_pContext = nullptr;
@@ -93,7 +94,6 @@ namespace D
                 ImGui_ImplDX11_Init(g_pDevice, g_pContext);
 
                 Menu::Initialize();
-                ESP::store_players();
 
                 g_pOriginalWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(g_hWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProcHandler)));
                 g_bInitialized = true;
@@ -127,6 +127,7 @@ namespace D
             if (G::menu.show) {
                 Menu::Render();
             }
+            ESP::render_esp();
 
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

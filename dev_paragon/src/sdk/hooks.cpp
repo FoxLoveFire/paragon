@@ -94,7 +94,7 @@ bool Hook::initialize()
         (void**)&olevelInit, "client.dll");
     Hook("48 89 5C 24 ? 48 89 6C 24 ? 57 48 83 EC ? 48 8B F9 33 ED", hkFrameStageNotify,
         (void**)&oFrameStageNotify, "client.dll");
-    Hook("48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 56 57 41", chams::hkOnGeneratePrimitives,
+    Hook("48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70", chams::hkOnGeneratePrimitives,
         (void**)&chams::oOnGeneratePrimitives, "scenesystem.dll");
     HookVtable(I::input_system, 76, D::hkIsRelativeMouseMode, 
         (void**)&D::oIsRelativeMouseMode, "inputsystem.dll");

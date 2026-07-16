@@ -34,9 +34,9 @@ struct unk_data_t {
 class CSceneAnimatableObject {
 public:
 	char pad1[0xB8];
-	unk_data_t* m_unk_data; // 0xB8
-	CBaseHandle m_owner{}; // 0xC0
-	char pad2[0x4C]; // align + reserved -> 0x110
+	unk_data_t* m_unk_data;
+	CBaseHandle m_owner{};
+	char pad2[0x4C];
 
 	CBaseHandle Owner() const {
 		return m_owner;
@@ -51,7 +51,7 @@ public:
 	CMaterial2* m_material2;
 	char pad1[32];
 	c_color m_color;
-	char pad2[16];
+	char pad2[28];
 };
 
 class c_mesh_primitive_output_buffer {
@@ -63,24 +63,6 @@ public:
 	c_mesh_primitive* get_primitive(int index) {
 		return &m_mesh_primitive_array[index];
 	}
-
-	c_mesh_primitive* alloc_primitive()
-	{
-		//if (this->m_arr_size >= this->m_max_size)
-		//{
-		//	this->m_max_size++;
-		//}
-
-		c_mesh_primitive* new_primitive = this->get_primitive(this->m_arr_size);
-		if (!new_primitive)
-			return nullptr;
-
-		memset(new_primitive, 0, sizeof(c_mesh_primitive));
-		this->m_arr_size++;
-
-		return new_primitive;
-	}
-
 };
 
 class c_animatable_scene_object_desc {
