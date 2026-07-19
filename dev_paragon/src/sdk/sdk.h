@@ -3,7 +3,7 @@
 #include "Interfaces/Interfaces.h"
 #include "utils/cutlbuffer/cutlbuffer.h"
 #include "utils/keyvalues/keyvalues.h"
-#include "math/mat4x4.h"
+#include "math/viewmatrix_t.h"
 
 class CUtlBuffer;
 class CUtlString;
@@ -19,6 +19,6 @@ namespace sdk
 	inline std::int64_t(__fastcall* CreateMaterial)(void*, void**, const char*, void*, void*, char);
 
 
-	mat4x4_t GetViewMatrix();
+	viewmatrix_t* GetViewMatrix();
 	bool initialize();
 };

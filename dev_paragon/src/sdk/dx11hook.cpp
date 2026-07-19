@@ -1,6 +1,7 @@
 #include "dx11hook.h"
 #include "../features/misc/settings/watermark.h"
 #include "../features/esp/esp.h"
+#include "../../paragon.h"
 
 ID3D11Device* D::g_pDevice = nullptr;
 ID3D11DeviceContext* D::g_pContext = nullptr;
@@ -16,7 +17,6 @@ IsRelativeMouseMode_t D::oIsRelativeMouseMode = nullptr;
 MouseInputEnabled_t D::oMouseInputEnabled = nullptr;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 namespace D
 {
     LRESULT CALLBACK WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -122,12 +122,12 @@ namespace D
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
 
+            paragon::visuals.esp();
             Settings::Watermark::Render();
 
             if (G::menu.show) {
                 Menu::Render();
             }
-            ESP::render_esp();
 
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

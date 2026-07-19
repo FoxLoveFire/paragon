@@ -3,9 +3,12 @@
 #include "src/sdk/sdk.h"
 #include "src/sdk/hooks.h"
 #include "src/sdk/utils/schema/schema.h"
+#include "src/features/esp/esp.h"
 
 namespace paragon
 {
+	inline Esp::Visuals visuals;
+
 	inline void main(HMODULE module)
 	{
 		AllocConsole();
@@ -30,5 +33,7 @@ namespace paragon
 		{
 			std::cout << "Schema is not loaded by init()" << std::endl;
 		}
+
+		visuals.init();
 	}
 }

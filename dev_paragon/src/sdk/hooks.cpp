@@ -20,7 +20,6 @@ void __fastcall hkFrameStageNotify(void* a1, int stage)
     case FRAME_NET_UPDATE_END:
         break;
     case FRAME_SIMULATE_END:
-        //ESP::store_players();
         break;
     default:
         break;
@@ -76,6 +75,8 @@ bool Hook::initialize()
         (void**)&WorldModulation::oSkyboxArray, "scenesystem.dll");
     Hook("40 57 48 83 EC ? 48 8B FA E8 ? ? ? ? BA", OverrideView::hkOverrideView,
         (void**)&OverrideView::oOverrideView, "client.dll");
+    Hook("48 89 5C 24 08 57 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 85", OverrideView::hkDrawCrosshair,
+        (void**)&OverrideView::oDrawCrosshair, "client.dll");
     Hook("40 55 53 56 41 56 41 57 48 8B EC", Viewmodel::hkViewModel,
         (void**)&Viewmodel::oViewModel, "client.dll");
     Hook("48 89 54 24 ? 55 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E2", Removals::hkDrawSmoke,

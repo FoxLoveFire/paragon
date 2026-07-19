@@ -4,7 +4,6 @@ bool sdk::initialize()
 {
 	if (!I::initialize())
 		return false;
-
 	const HMODULE tier0_base = GetModuleHandleA("tier0.dll");
 	ConstructUtlBuffer = reinterpret_cast<decltype(ConstructUtlBuffer)>(GetProcAddress(tier0_base, "??0CUtlBuffer@@QEAA@HHW4BufferFlags_t@0@@Z"));
 	EnsureCapacityBuffer = reinterpret_cast<decltype(EnsureCapacityBuffer)>(GetProcAddress(tier0_base, "?EnsureCapacity@CUtlBuffer@@QEAAXH@Z"));
@@ -19,16 +18,10 @@ bool sdk::initialize()
 	return true;
 }
 
-mat4x4_t sdk::GetViewMatrix()
+viewmatrix_t* sdk::GetViewMatrix()
 {
-	mat4x4_t matrix{};
-
-	uintptr_t address = Memory::pattern_scan("48 8D 0D ? ? ? ? 48 C1 E0 06", "client.dll");
-	if (!address)
-		return matrix;
-
-
-	matrix = *reinterpret_cast<mat4x4_t*>(Memory::getAbsoluteAddress(
+	viewmatrix_t* matrix;
+	matrix = reinterpret_cast<viewmatrix_t*>(Memory::getAbsoluteAddress(
 	Memory::pattern_scan("48 8D 0D ? ? ? ? 48 C1 E0 06", "client.dll"), 3, 0));
 
 	return matrix;

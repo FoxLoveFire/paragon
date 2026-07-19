@@ -33,10 +33,8 @@ struct unk_data_t {
 
 class CSceneAnimatableObject {
 public:
-	char pad1[0xB8];
-	unk_data_t* m_unk_data;
 	CBaseHandle m_owner{};
-	char pad2[0x4C];
+	char pad2[0x1C];
 
 	CBaseHandle Owner() const {
 		return m_owner;
@@ -45,13 +43,16 @@ public:
 
 class c_mesh_primitive {
 public:
-	char pad0[24];
-	CSceneAnimatableObject* m_scene_animatable_object;
-	CMaterial2* m_material;
-	CMaterial2* m_material2;
-	char pad1[32];
-	c_color m_color;
-	char pad2[28];
+	void* m_pData;
+	char pad0[0x10];
+	CSceneAnimatableObject* m_pSceneAnimatableObject;
+	CMaterial2 *m_pMaterial;
+	CMaterial2* m_pMaterial2;
+	char pad1[0x10];
+	void* some_data;
+	char pad2[0x8];
+	c_color m_pColor;
+	char pad3[0x1C];
 };
 
 class c_mesh_primitive_output_buffer {
@@ -65,17 +66,10 @@ public:
 	}
 };
 
-class c_animatable_scene_object_desc {
-public:
-	CSceneAnimatableObject* create() {
-		return Memory::call_vfunc<CSceneAnimatableObject*>(this, 21);
-	}
-};
-
 namespace chams
 {
-	using OnGeneratePrimitivesFn = __int64(__fastcall*)(c_animatable_scene_object_desc* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf);
+	using OnGeneratePrimitivesFn = __int64(__fastcall*)(void* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf);
 	inline OnGeneratePrimitivesFn oOnGeneratePrimitives = nullptr;
-	__int64 hkOnGeneratePrimitives(c_animatable_scene_object_desc* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf);
+	__int64 hkOnGeneratePrimitives(void* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf);
 
 }

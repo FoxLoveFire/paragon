@@ -10,6 +10,7 @@
 #include "../features/viewport/Viewmodel.h"
 #include "../features/visuals/Removals.h"
 #include "cs2/classes/C_CSPlayerPawn/C_CSPlayerPawn.h"
+#include "cs2/classes/CCSPlayerController/CCSPlayerController.h"
 #include "../features/misc/radarhack/radarhack.h"
 #include "../features/chams/chams.h"
 #include "../../globals.h"

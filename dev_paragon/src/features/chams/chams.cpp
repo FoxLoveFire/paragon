@@ -74,7 +74,7 @@ void Material::material_init()
 c_color color_invisible = { 255, 0, 0 };
 c_color color_visible = { 0, 255, 0 };
 
-__int64 chams::hkOnGeneratePrimitives(c_animatable_scene_object_desc* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf)
+__int64 chams::hkOnGeneratePrimitives(void* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf)
 {
     if (!I::engine_client->valid() || !render_buf || render_buf->m_arr_size <= 0)
         return oOnGeneratePrimitives(desc, object, a3, render_buf);
@@ -90,18 +90,14 @@ __int64 chams::hkOnGeneratePrimitives(c_animatable_scene_object_desc* desc, CSce
         for (int i = 0; i < render_buf->m_arr_size; i++)
         {
             c_mesh_primitive* mesh_primitives = render_buf->get_primitive(i);
-            auto entity = I::GameEntity->Instance->Get(render_ent);
+            //auto entity = I::GameEntity->Instance->Get(render_ent);
 
-            C_CSPlayerPawn* local = Hook::oGetLocalPlayer(0);
-            if (entity == local)
-                continue;
+            //C_CSPlayerPawn* local = Hook::oGetLocalPlayer(0);
+            //if (entity == local)
+            //    continue;
 
-            if (entity->m_iHealth() > 0)
-            {
-                std::cout << "entity->m_iHealth() > 0" << std::endl;
-                mesh_primitives->m_material = resourceMaterials[ChamsType::BLOOM].mat_invs;
-                mesh_primitives->m_color = color_invisible;
-            }
+            //mesh_primitives->m_pMaterial = resourceMaterials[ChamsType::BLOOM].mat;
+            //mesh_primitives->m_pColor = color_invisible;
         }
         oOnGeneratePrimitives(desc, object, a3, render_buf);
     }

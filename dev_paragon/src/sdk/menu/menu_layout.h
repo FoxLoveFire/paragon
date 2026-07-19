@@ -20,7 +20,8 @@ inline const std::string json_layout = R"(
                 { "type": "dropdown", "id": "effects_type", "items": ["ash", "none", "rain", "snow"], "condition": "world_effects" },
                 { "type": "checkbox", "id": "override_fog", "label": "override fog", "color": "override_fog_col" },
                 { "type": "checkbox", "id": "override_wall", "label": "override wall", "color": "override_wall_col" },
-                { "type": "checkbox", "id": "override_skybox", "label": "override skybox", "colors": ["override_skybox_col1", "override_skybox_col2", "override_skybox_col3"] }
+                { "type": "checkbox", "id": "override_skybox", "label": "override skybox", "colors": ["override_skybox_col1", "override_skybox_col2", "override_skybox_col3"] },
+                { "type": "slider", "id": "darkening_val", "label": "darkening", "min": 0.0, "max": 100.0, "default": 0.0, "format": "%.0f", "suffix": "%" }
               ]
             }
           ]

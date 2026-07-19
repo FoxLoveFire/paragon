@@ -712,6 +712,8 @@ namespace Menu {
         G::viewport.custom_fov   = cfg["override_fov"].b;
         G::viewport.fov          = cfg["fov_val"].f;
         G::viewport.aspect_ratio = cfg["aspect_ratio"].f;
+        G::world.m_exposure = cfg["darkening_val"].f;
+
     }
 
     void Render() {

@@ -17,7 +17,7 @@ public:
 	vector3d(vector3d&& other) noexcept;
 	vector3d(float* other);
 
-	vector3d operator+(const vector3d& other);
+	vector3d operator+(const vector3d& other) const;
 	vector3d operator-(const vector3d& other);
 	vector3d operator*(const vector3d& other);
 	vector3d operator/(const vector3d& other);

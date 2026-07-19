@@ -58,3 +58,8 @@ void __fastcall OverrideView::hkOverrideView(void* pClientModeCSNormal, c_view_s
     }
     oOverrideView(pClientModeCSNormal, pSetup);
 }
+
+bool __fastcall OverrideView::hkDrawCrosshair(void* a1)
+{
+    return true;
+}

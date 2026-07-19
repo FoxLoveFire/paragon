@@ -35,7 +35,7 @@ namespace G
         bool custom_fov = false;
         float fov = 90;
         float aspect_ratio = 1.77778f;
-        bool thirdperson = true;
+        bool thirdperson = false;
     };
 
     inline Viewport_t viewport = Viewport_t();
@@ -66,12 +66,28 @@ namespace G
 
     inline Misc_t misc = Misc_t();
 
-    struct ChamsConfig
+    struct ChamsConfig_t
     {
         bool is_enabled = true;
         c_color color = c_color(0, 255, 0, 255);
         c_color color_invis = c_color(255, 0, 0, 255);
     };
 
-    inline ChamsConfig g_chams_config = ChamsConfig();
+    inline ChamsConfig_t g_chams_config = ChamsConfig_t();
+
+    struct ESP_t
+    {
+        bool esp = true;
+        bool showHealth = true;
+        bool espFill = false;
+        bool showNameTags = true;
+        bool teamcheck = true;
+        float espThickness = 1.0f;
+        float espFillOpacity = 0.5f;
+
+        c_color team = c_color(0, 255, 0, 0);
+        c_color enemy = c_color(255, 0, 0, 0);
+    };
+
+    inline ESP_t esp_config = ESP_t();
 }

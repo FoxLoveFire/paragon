@@ -14,7 +14,7 @@ vector3d::vector3d(vector3d&& other) noexcept : x(other.x), y(other.y), z(other.
 
 vector3d::vector3d(float* other) : x(other[0]), y(other[1]), z(other[2]) {}
 
-vector3d vector3d::operator+(const vector3d& other)
+vector3d vector3d::operator+(const vector3d& other) const
 {
 	return { x + other.x, y + other.y, z + other.z };
 }
