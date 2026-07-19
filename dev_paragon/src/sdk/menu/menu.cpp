@@ -143,6 +143,11 @@ namespace UI_MDD {
 namespace Menu {
     std::unordered_map<std::string, ConfigValue> cfg;
 
+    inline std::string StripHash(const std::string& str) {
+        size_t pos = str.find("##");
+        return (pos == std::string::npos) ? str : str.substr(0, pos);
+    }
+
     struct ElementDef {
         std::string type, id, label, condition, suffix, format = "%.1f";
         std::vector<std::string> color_ids;
@@ -440,10 +445,11 @@ namespace Menu {
         }
     }
 
-    static void DrawBox(ImDrawList* dl, ImVec2 wpos, float lx, float box_top, float box_bottom, float w, const char* label) {
+    static void DrawBox(ImDrawList* dl, ImVec2 wpos, float lx, float box_top, float box_bottom, float w, const char* raw_label) {
+        std::string label = StripHash(raw_label);
         auto S = [&](float x, float y) { return ImVec2(wpos.x + x, wpos.y + y); };
         float lh = ImGui::GetTextLineHeight(), gap = 5.0f;
-        ImVec2 ts = ImGui::CalcTextSize(label);
+        ImVec2 ts = ImGui::CalcTextSize(label.c_str());
         float tx = lx + 12.0f, ty = box_top - lh * 0.5f;
 
         dl->AddLine(S(lx, box_top), S(tx - gap, box_top), Colors::SectionBorder, 1.0f);
@@ -452,7 +458,7 @@ namespace Menu {
         dl->AddLine(S(lx + w, box_top), S(lx + w, box_bottom), Colors::SectionBorder, 1.0f);
         dl->AddLine(S(lx, box_bottom), S(lx + w, box_bottom), Colors::SectionBorder, 1.0f);
         dl->AddRectFilled(S(tx, ty), S(tx + ts.x, ty + lh), Colors::Bg);
-        dl->AddText(S(tx, ty), IM_COL32(255, 255, 255, 255), label);
+        dl->AddText(S(tx, ty), IM_COL32(255, 255, 255, 255), label.c_str());
     }
 
     static void RenderConfigList(float inner_x, float inner_w, float& y, ImVec2 wpos, ImDrawList* dl) {
@@ -474,6 +480,8 @@ namespace Menu {
         int hov_idx = -1;
         int max_vis = static_cast<int>(list_h / item_h);
 
+        ImGui::PushClipRect(list_pos, list_end, true);
+
         for (int i = 0; i < static_cast<int>(s_cfg_list.size()) && i < max_vis; i++) {
             ImVec2 ip0 = ImVec2(list_pos.x + 1, list_pos.y + 1 + i * item_h);
             ImVec2 ip1 = ImVec2(list_end.x - 1, ip0.y + item_h);
@@ -491,6 +499,8 @@ namespace Menu {
             dl->AddText(ImVec2(ip0.x + 6.0f, ty2), tc, s_cfg_list[i].c_str());
         }
 
+        ImGui::PopClipRect();
+
         ImGui::SetCursorScreenPos(list_pos);
         ImGui::InvisibleButton("##cfg_list", ImVec2(list_w, list_h));
         if (ImGui::IsItemClicked() && hov_idx >= 0) s_cfg_sel = hov_idx;
@@ -501,15 +511,17 @@ namespace Menu {
         UI::TextInput("##cfg_name", s_cfg_input, sizeof(s_cfg_input), list_w);
         y += input_h + 4.0f;
 
+        ImGui::PushID("cfg_btns");
         std::pair<const char*, void(*)()> buttons[] = {
-            {"create##cfg", CfgCreate}, {"save##cfg", CfgSave}, {"load##cfg", CfgLoad}, {"open directory##cfg", CfgOpenDir}
+            {"create", CfgCreate}, {"save", CfgSave}, {"load", CfgLoad}, {"open directory", CfgOpenDir}
         };
 
         for (const auto& btn : buttons) {
             ImGui::SetCursorPos(ImVec2(inner_x, y));
             if (UI::Button(btn.first, list_w)) btn.second();
-            y += btn_h + (strcmp(btn.first, "open directory##cfg") == 0 ? 8.0f : 3.0f);
+            y += btn_h + (strcmp(btn.first, "open directory") == 0 ? 8.0f : 3.0f);
         }
+        ImGui::PopID();
     }
 
     static void RenderImageList(float inner_x, float inner_w, float& y, ImVec2 wpos, ImDrawList* dl) {
@@ -530,6 +542,8 @@ namespace Menu {
         int hov_idx = -1;
         int max_vis = static_cast<int>(list_h / item_h);
 
+        ImGui::PushClipRect(list_pos, list_end, true);
+
         for (int i = 0; i < static_cast<int>(s_img_list.size()) && i < max_vis; i++) {
             ImVec2 ip0 = ImVec2(list_pos.x + 1, list_pos.y + 1 + i * item_h);
             ImVec2 ip1 = ImVec2(list_end.x - 1, ip0.y + item_h);
@@ -547,8 +561,10 @@ namespace Menu {
             dl->AddText(ImVec2(ip0.x + 6.0f, ty2), tc, s_img_list[i].c_str());
         }
 
+        ImGui::PopClipRect();
+
         ImGui::SetCursorScreenPos(list_pos);
-        ImGui::InvisibleButton("##img_list", ImVec2(list_w, list_h));
+        ImGui::InvisibleButton("##cfg", ImVec2(list_w, list_h));
         if (ImGui::IsItemClicked() && hov_idx >= 0) {
             s_img_sel = hov_idx;
             cfg["custom_overlay_file"].s = s_img_list[hov_idx];
@@ -557,16 +573,20 @@ namespace Menu {
         y += list_h + 8.0f;
 
         ImGui::SetCursorPos(ImVec2(inner_x, y));
-        if (UI::Button("open directory##img", list_w)) {
+        ImGui::PushID("img_dir");
+        if (UI::Button("open directory", list_w)) {
             ImgEnsureDir();
             ShellExecuteA(nullptr, "open", k_img_dir, nullptr, nullptr, SW_SHOW);
         }
+        ImGui::PopID();
         y += btn_h + 4.0f;
         
         ImGui::SetCursorPos(ImVec2(inner_x, y));
-        if (UI::Button("refresh list##img", list_w)) {
+        ImGui::PushID("img_ref");
+        if (UI::Button("refresh list", list_w)) {
             s_img_dirty = true;
         }
+        ImGui::PopID();
         y += btn_h + 8.0f;
     }
 
@@ -595,7 +615,7 @@ namespace Menu {
             } 
             else if (el.type == "dropdown") {
                 if (!el.label.empty() && el.label.find("##") != 0) {
-                    dl->AddText(ImVec2(wpos.x + inner_x, wpos.y + y), IM_COL32(255, 255, 255, 255), el.label.c_str());
+                    dl->AddText(ImVec2(wpos.x + inner_x, wpos.y + y), IM_COL32(255, 255, 255, 255), StripHash(el.label).c_str());
                     y += ImGui::GetTextLineHeight() + 4.0f;
                 }
                 std::vector<const char*> cstrs;
@@ -606,7 +626,7 @@ namespace Menu {
                 y += ITEM_SPACING;
             } 
             else if (el.type == "multidropdown") {
-                dl->AddText(ImVec2(wpos.x + inner_x, wpos.y + y), IM_COL32(255, 255, 255, 255), el.label.c_str());
+                dl->AddText(ImVec2(wpos.x + inner_x, wpos.y + y), IM_COL32(255, 255, 255, 255), StripHash(el.label).c_str());
                 y += ImGui::GetTextLineHeight() + 4.0f;
                 
                 UI_MDD::MultiDropdown(("##" + el.id).c_str(), el.id, el.items, inner_w, ImVec2(wpos.x + inner_x, wpos.y + y), dl);
@@ -614,7 +634,7 @@ namespace Menu {
             } 
             else if (el.type == "colorpicker") {
                 if (!el.label.empty() && el.label.find("##") != 0) {
-                    dl->AddText(ImVec2(wpos.x + inner_x, wpos.y + y + (16.0f - ImGui::GetTextLineHeight()) * 0.5f), IM_COL32(255, 255, 255, 255), el.label.c_str());
+                    dl->AddText(ImVec2(wpos.x + inner_x, wpos.y + y + (16.0f - ImGui::GetTextLineHeight()) * 0.5f), IM_COL32(255, 255, 255, 255), StripHash(el.label).c_str());
                 }
                 ImGui::SetCursorPos(ImVec2(inner_x, y));
                 if (!el.color_ids.empty()) {
@@ -658,9 +678,11 @@ namespace Menu {
                     }
 
                     ImGui::SetCursorPos(ImVec2(inner_x, y));
+                    ImGui::PushID("img_apply_btn");
                     if (UI::Button("Apply Image", inner_w)) {
                         cfg["custom_overlay_apply"].b = true;
                     }
+                    ImGui::PopID();
                     y += 24.0f;
 
                     ImGui::SetCursorPos(ImVec2(inner_x, y));
@@ -712,8 +734,8 @@ namespace Menu {
         G::viewport.custom_fov   = cfg["override_fov"].b;
         G::viewport.fov          = cfg["fov_val"].f;
         G::viewport.aspect_ratio = cfg["aspect_ratio"].f;
-        G::world.m_exposure = cfg["darkening_val"].f;
-
+        G::viewport.thirdperson  = cfg["thirdperson"].b;
+        G::viewport.thirdperson_dist = cfg["thirdperson_dist"].f;
     }
 
     void Render() {

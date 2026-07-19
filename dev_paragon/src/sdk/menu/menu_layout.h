@@ -39,7 +39,9 @@ inline const std::string json_layout = R"(
                 { "type": "slider", "id": "viewmodel_fov", "label": "##vm_fov", "min": -30.0, "max": 30.0, "format": "%.1f", "suffix": "°", "condition": "override_viewmodel_pos" },
                 { "type": "checkbox", "id": "override_fov", "label": "override fov" },
                 { "type": "slider", "id": "fov_val", "label": "##fov", "min": 0.0, "max": 120.0, "default": 90.0, "format": "%.1f", "suffix": "°", "condition": "override_fov" },
-                { "type": "slider", "id": "aspect_ratio", "label": "##aspect", "min": 0.5, "max": 2.5, "format": "%.2f", "suffix": "ratio", "condition": "override_fov" }
+                { "type": "slider", "id": "aspect_ratio", "label": "##aspect", "min": 0.5, "max": 2.5, "format": "%.2f", "suffix": "ratio", "condition": "override_fov" },
+                { "type": "checkbox", "id": "thirdperson", "label": "thirdperson view" },
+                { "type": "slider", "id": "thirdperson_dist", "label": "##tp_dist", "min": 30.0, "max": 250.0, "default": 120.0, "format": "%.1f", "suffix": "u", "condition": "thirdperson" }
               ]
             }
           ],
