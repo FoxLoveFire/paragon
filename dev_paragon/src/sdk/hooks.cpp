@@ -65,6 +65,7 @@ bool Hook::initialize()
     oGetLocalPlayer = reinterpret_cast<decltype(oGetLocalPlayer)>(Memory::getAbsoluteAddress(
         Memory::pattern_scan("E8 ? ? ? ? 4C 8B E0 48 85 C0 0F 84 ? ? ? ? ? ? ? 48 8B C8 FF 92 ? ? ? ? 84 C0 0F 84 ? ? ? ? ? ? ? ? 49 8B CC", "client.dll"), 1));
     ogGetBaseEntity = reinterpret_cast<decltype(ogGetBaseEntity)>(Memory::pattern_scan("4C 8D 49 ? 81 FA", "client.dll"));
+   
     Hook("48 89 54 24 ?? 55 57 41 56 48 83 EC", WorldModulation::hkDrawArrayLight,
         (void**)&WorldModulation::oDrawArrayLight, "scenesystem.dll");
     Hook("48 8B C4 48 89 50 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70", WorldModulation::hkWallColor,
@@ -95,8 +96,10 @@ bool Hook::initialize()
         (void**)&olevelInit, "client.dll");
     Hook("48 89 5C 24 ? 48 89 6C 24 ? 57 48 83 EC ? 48 8B F9 33 ED", hkFrameStageNotify,
         (void**)&oFrameStageNotify, "client.dll");
-    Hook("48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70", chams::hkOnGeneratePrimitives,
-        (void**)&chams::oOnGeneratePrimitives, "scenesystem.dll");
+    //Hook("48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70", chams::hkOnGeneratePrimitives,
+    //    (void**)&chams::oOnGeneratePrimitives, "scenesystem.dll"); -- надо крч использовать хук для чамсов
+    Hook("48 8B C4 53 57 41 54 48 81 EC ?? ?? ?? ?? 49 63 F9 49", chams::hkDrawArray,
+        (void**)&chams::oDrawArray, "scenesystem.dll");
     HookVtable(I::input_system, 76, D::hkIsRelativeMouseMode, 
         (void**)&D::oIsRelativeMouseMode, "inputsystem.dll");
     Hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 41 8B E8", D::hkPresent,

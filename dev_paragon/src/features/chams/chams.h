@@ -33,8 +33,10 @@ struct unk_data_t {
 
 class CSceneAnimatableObject {
 public:
-	CBaseHandle m_owner{};
-	char pad2[0x1C];
+	char pad1[0xB8];
+	unk_data_t* m_unk_data; // 0xB8
+	CBaseHandle m_owner{}; // 0xC0
+	char pad2[0x4C]; // align + reserved -> 0x110
 
 	CBaseHandle Owner() const {
 		return m_owner;
@@ -43,23 +45,20 @@ public:
 
 class c_mesh_primitive {
 public:
-	void* m_pData;
-	char pad0[0x10];
+	char pad0[0x18];
 	CSceneAnimatableObject* m_pSceneAnimatableObject;
-	CMaterial2 *m_pMaterial;
+	CMaterial2* m_pMaterial;
 	CMaterial2* m_pMaterial2;
-	char pad1[0x10];
-	void* some_data;
-	char pad2[0x8];
+	char pad1[0x20];
 	c_color m_pColor;
-	char pad3[0x1C];
+	char pad3[0x10];
 };
 
 class c_mesh_primitive_output_buffer {
 public:
 	c_mesh_primitive* m_mesh_primitive_array;
-	int m_arr_size;
 	char pad0[4];
+	int m_arr_size;
 
 	c_mesh_primitive* get_primitive(int index) {
 		return &m_mesh_primitive_array[index];
@@ -72,4 +71,7 @@ namespace chams
 	inline OnGeneratePrimitivesFn oOnGeneratePrimitives = nullptr;
 	__int64 hkOnGeneratePrimitives(void* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf);
 
+	using DrawArrayFn = void*(__fastcall*)(uint64_t a1, uint64_t a2, c_mesh_primitive* a3, int32_t a4, uint64_t a5, uint64_t a6, uint64_t a7);
+	inline DrawArrayFn oDrawArray = nullptr;
+	void* hkDrawArray(uint64_t a1, uint64_t a2, c_mesh_primitive* a3, int32_t a4, uint64_t a5, uint64_t a6, uint64_t a7);
 }

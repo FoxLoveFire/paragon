@@ -166,9 +166,10 @@ void Esp::cache()
     }
 }
 
-void Visuals::esp() {
-
-
+void Visuals::esp()
+{
+    if (!I::engine_client->valid())
+        return;
     Esp::cache();
 
     C_CSPlayerPawn* localPawn = Hook::oGetLocalPlayer(0);

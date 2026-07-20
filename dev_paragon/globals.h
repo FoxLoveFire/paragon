@@ -35,7 +35,9 @@ namespace G
         bool custom_fov = false;
         float fov = 90;
         float aspect_ratio = 1.77778f;
-        bool thirdperson = false;
+        bool thirdperson = true;
+
+        bool enable_crosshair = false;
     };
 
     inline Viewport_t viewport = Viewport_t();

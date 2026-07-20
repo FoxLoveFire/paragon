@@ -61,5 +61,7 @@ void __fastcall OverrideView::hkOverrideView(void* pClientModeCSNormal, c_view_s
 
 bool __fastcall OverrideView::hkDrawCrosshair(void* a1)
 {
-    return true;
+    if (G::viewport.enable_crosshair)
+        return true;
+    return oDrawCrosshair(a1);
 }
