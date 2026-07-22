@@ -42,13 +42,8 @@ class C_CSPlayerPawn : public C_BaseEntity {
 public:
 	schema(vector3d, m_vOldOrigin, "C_BasePlayerPawn->m_vOldOrigin");
 	schema(vector3d, m_vecViewOffset, "C_BaseModelEntity->m_vecViewOffset");
-	//schema(CCSPlayer_WeaponServices*, m_pWeaponServices, "C_BasePlayerPawn->m_pWeaponServices");
 	C_CSPlayerPawn(uintptr_t address);
 
-	//QAngle_t GetAimPunch() const;
-
-	//C_CSWeaponBase * GetActiveWeapon() const;
-	//CCSPlayer_WeaponServices* GetWeaponServices() const;
 	vector3d getPosition() const;
 	vector3d getEyePosition() const;
 	vector3d getViewOffset() const;
@@ -64,4 +59,3 @@ public:
 private:
 	uintptr_t address;
 };
-

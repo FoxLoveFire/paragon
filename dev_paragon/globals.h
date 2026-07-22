@@ -9,25 +9,20 @@ namespace G
     {
         bool show = true;
     };
-
     inline Menu_t menu = Menu_t();
 
     struct WorldModulation_t
     {
         bool custom_light = false;
         c_color light_color = c_color(255, 0, 255);
-        
         bool custom_wall_color = false;
         c_color wall_color = c_color(0, 255, 0);
-
         int m_exposure = 0;
-        
         bool custom_skybox = false;
         c_color skybox_color = c_color(255, 255, 255);
         c_color skybox_color2 = c_color(255, 255, 255);
         c_color skybox_color3 = c_color(255, 255, 255);
     };
-
     inline WorldModulation_t world = WorldModulation_t();
 
     struct Viewport_t
@@ -37,8 +32,8 @@ namespace G
         float aspect_ratio = 1.77778f;
         bool thirdperson = false;
         float thirdperson_dist = 120.0f;
+        bool enable_crosshair = false;
     };
-
     inline Viewport_t viewport = Viewport_t();
 
     struct Viewmodel_t
@@ -47,7 +42,6 @@ namespace G
         std::vector<float> xyz = {0.0f, 0.0f, 0.0f};
         float v_fov = 0.0f;
     };
-
     inline Viewmodel_t viewmodel = Viewmodel_t();
 
     struct Removals_t
@@ -57,14 +51,12 @@ namespace G
         bool remove_legs = false;
         bool disable_flashbang = false;
     };
-
     inline Removals_t removals = Removals_t();
 
     struct Misc_t
     {
         bool rh_enabled = false;
     };
-
     inline Misc_t misc = Misc_t();
 
     struct ChamsConfig_t
@@ -73,7 +65,6 @@ namespace G
         c_color color = c_color(0, 255, 0, 255);
         c_color color_invis = c_color(255, 0, 0, 255);
     };
-
     inline ChamsConfig_t g_chams_config = ChamsConfig_t();
 
     struct ESP_t
@@ -85,10 +76,26 @@ namespace G
         bool teamcheck = true;
         float espThickness = 1.0f;
         float espFillOpacity = 0.5f;
-
         c_color team = c_color(0, 255, 0, 0);
         c_color enemy = c_color(255, 0, 0, 0);
     };
-
     inline ESP_t esp_config = ESP_t();
+
+    struct Defensive_t
+    {
+        bool enabled = false;
+        int max_choke = 2;
+        float fake_yaw = 90.0f;
+    };
+    inline Defensive_t defensive;
+
+    struct FakeLag_t
+    {
+        bool enabled = false;
+        int limit = 4;
+        int mode = 0;
+        int peek_limit = 14;
+        bool valve_mode = true;
+    };
+    inline FakeLag_t fakelag;
 }

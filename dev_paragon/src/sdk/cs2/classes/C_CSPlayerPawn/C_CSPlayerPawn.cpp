@@ -5,22 +5,6 @@ vector3d C_CSPlayerPawn::getPosition() const {
 	return *(vector3d*)(address + SchemaFinder::Get(HASH("C_BasePlayerPawn->m_vOldOrigin")));
 }
 
-//QAngle_t C_CSPlayerPawn::GetAimPunch() const {
-//	__try {
-//		uintptr_t pAimPunchServices = *reinterpret_cast<uintptr_t*>(address + SchemaFinder::Get(HASH("C_CSPlayerPawn->m_pAimPunchServices")));
-//		if (pAimPunchServices) {
-//			auto aimPunchCache = *reinterpret_cast<C_NetworkUtlVectorBase<QAngle_t>*>(pAimPunchServices + SchemaFinder::Get(HASH("CCSPlayer_AimPunchServices->m_aimPunchCache")));
-//			if (aimPunchCache.nSize > 0 && aimPunchCache.nSize < 0xFFFF && aimPunchCache.pElements) {
-//				return aimPunchCache.pElements[aimPunchCache.nSize - 1];
-//			}
-//		}
-//	}
-//	__except (EXCEPTION_EXECUTE_HANDLER) {
-//		return QAngle_t(0, 0, 0);
-//	}
-//	return QAngle_t(0, 0, 0);
-//}
-
 vector3d C_CSPlayerPawn::getEyePosition() const {
 	vector3d view_;
 	Memory::call_vfunc<void, vector3d&>(const_cast<C_CSPlayerPawn*>(this), 170, view_);

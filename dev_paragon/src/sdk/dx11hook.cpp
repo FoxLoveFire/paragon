@@ -17,6 +17,7 @@ IsRelativeMouseMode_t D::oIsRelativeMouseMode = nullptr;
 MouseInputEnabled_t D::oMouseInputEnabled = nullptr;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 namespace D
 {
     LRESULT CALLBACK WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -113,7 +114,7 @@ namespace D
             g_pContext->OMGetRenderTargets(1, pOldRTV.GetAddressOf(), pOldDSV.GetAddressOf());
 
             std::array<D3D11_VIEWPORT, D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE> oldVP{};
-            UINT numViewports = oldVP.size();
+            UINT numViewports = static_cast<UINT>(oldVP.size());
             g_pContext->RSGetViewports(&numViewports, oldVP.data());
 
             g_pContext->OMSetRenderTargets(1, &g_pRenderTargetView, nullptr);

@@ -1,10 +1,8 @@
 #pragma once
-#include <Windows.h>
+#include "../../sdk/cs2/datatypes/usercmd/usercmd.h"
 
 namespace FakeLag
 {
-    using SendMovePacketFn = void(__fastcall*)(void* rcx);
-    inline SendMovePacketFn oSendMovePacket = nullptr;
-
-    void __fastcall hkSendMovePacket(void* rcx);
+    void OnCreateMove(CUserCmd* cmd);
+    bool ShouldChokePacket();
 }

@@ -28,16 +28,22 @@
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3d11.lib")
 
-using  levelInitFn = __int64(__fastcall*)(__int64 a1, __int64 a2);
+using levelInitFn = __int64(__fastcall*)(__int64 a1, __int64 a2);
 inline levelInitFn olevelInit = nullptr;
 using FrameStageNotifyFn = void(__fastcall*)(void* a1, int stage);
 inline FrameStageNotifyFn oFrameStageNotify = nullptr;
+using SendMovePacketFn = void(__fastcall*)(void* rcx);
+inline SendMovePacketFn oSendMovePacket = nullptr;
 
 #define SetModel "40 53 48 83 EC ? 48 8B D9 4C 8B C2 48 8B 0D ? ? ? ? 48 8D 54 24"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace Hook
 {
+    using CreateMoveFn = bool(__fastcall*)(void*, int, void*);
+    inline CreateMoveFn oCreateMove = nullptr;
+    bool __fastcall hkCreateMove(void* rcx, int slot, void* cmd);
+
     bool Hook(const char* pattern, LPVOID detour, LPVOID* original, std::string module);
     bool HookAddress(uintptr_t address, LPVOID detour, LPVOID* original);
     bool HookVtable(void* class_instance, int index, void* detour, void** original, std::string module);

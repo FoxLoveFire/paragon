@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\features\movement\fakelag.h" />
     <ClInclude Include="src\features\esp\esp.h" />
     <ClInclude Include="src\features\misc\settings\steam_api.h" />
     <ClInclude Include="src\sdk\cs2\datatypes\usercmd\usercmd.h" />
@@ -96,9 +95,10 @@
     <ClInclude Include="src\features\viewport\Viewmodel.h" />
     <ClInclude Include="src\sdk\utils\fnv1a\fnv1a.h" />
     <ClInclude Include="src\sdk\utils\viewmatrix\viewmatrix.h" />
+    <ClInclude Include="src\features\antiaim\defensiveaa.h" />
+    <ClInclude Include="src\features\movement\fakelag.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\features\movement\fakelag.cpp" />
     <ClCompile Include="src\features\esp\esp.cpp" />
     <ClCompile Include="src\sdk\Interfaces\CGameEntitySystem\CGameEntitySystem.cpp" />
     <ClCompile Include="src\sdk\cs2\classes\CCSPlayerController\CCSPlayerController.cpp" />
@@ -143,6 +143,12 @@
     <ClCompile Include="src\features\visuals\WorldModulation.cpp" />
     <ClCompile Include="src\features\viewport\Viewmodel.cpp" />
     <ClCompile Include="src\sdk\utils\viewmatrix\viewmatrix.cpp" />
+    <ClCompile Include="src\features\antiaim\defensiveaa.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\features\movement\fakelag.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
@@ -203,8 +209,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;DEVPARAGON_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(ProjectDir)external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -224,8 +230,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;DEVPARAGON_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(ProjectDir)external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -244,7 +250,8 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(ProjectDir)external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -264,8 +271,8 @@
       <PreprocessorDefinitions>NDEBUG;DEVPARAGON_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(ProjectDir)external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -31,76 +31,90 @@ void Material::material_init()
 {
     resourceMaterials[ChamsType::BLOOM] = resource_material_t
     {
-        .mat_invs = create("materials/dev/primary_white.vmat",
-            R"(<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d}
-            format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
-            {
-                shader = "solidcolor.vfx"
-                g_tColor = resource:"materials/dev/primary_white_color_tga_21186c76.vtex"
-                g_tNormal = resource:"materials/default/default_normal_tga_7652cb.vtex"
-                g_tRoughness = resource:"materials/default/default_normal_tga_b3f4ec4c.vtex"
-                g_tMetalness = resource:"materials/default/default_normal_tga_b3f4ec4c.vtex"
-                g_tAmbientOcclusion = resource:"materials/default/default_normal_tga_b3f4ec4c.vtex"
-                F_IGNOREZ = 1
-                F_DISABLE_Z_WRITE = 1
-                F_DISABLE_Z_BUFFERING = 1
-                F_BLEND_MODE = 1
-                F_TRANSLUCENT = 1
-                F_RENDER_BACKFACES = 1
-                g_vColorTint = [9.0, 9.0, 9.0, 9.0]
-            })"),
+        .mat_invs = create("materials/dev/metallic2_i.vmat",
+           R"(<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d}format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+        {
+            shader = "csgo_complex.vfx"
+            F_DISABLE_Z_BUFFERING = 1
+            F_DISABLE_Z_PREPASS = 1
+            F_DISABLE_Z_WRITE = 1
+            F_BLEND_MODE = 1
+            F_RENDER_BACKFACES = 0
+            g_vColorTint = [1.0, 1.0, 1.0, 1.0]
+            g_bFogEnabled = 0
+            g_flMetalness = 1.000
+            g_flModelTintAmount = 1.000
+            g_nScaleTexCoordUByModelScaleAxis = 0
+            g_nScaleTexCoordVByModelScaleAxis = 0
+            g_nTextureAddressModeU = 0
+            g_nTextureAddressModeV = 0
+            g_flTexCoordRotation = 0.000
+            g_tColor = resource:"materials/dev/primary_white_color_tga_21186c76.vtex"
+            g_tAmbientOcclusion = resource:"materials/default/default_ao_tga_559f1ac6.vtex"
+            g_tNormal = resource:"materials/default/default_normal_tga_1b833b2a.vtex"
+        })"),
 
-        .mat = create("materials/dev/primary_white.vmat",
-                        R"(<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d}
-            format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
-            {
-                shader = "solidcolor.vfx"
-                g_tColor = resource:"materials/dev/primary_white_color_tga_21186c76.vtex"
-                g_tNormal = resource:"materials/default/default_normal_tga_7652cb.vtex"
-                g_tRoughness = resource:"materials/default/default_normal_tga_b3f4ec4c.vtex"
-                g_tMetalness = resource:"materials/default/default_normal_tga_b3f4ec4c.vtex"
-                g_tAmbientOcclusion = resource:"materials/default/default_normal_tga_b3f4ec4c.vtex"
-                F_IGNOREZ = 0
-                F_DISABLE_Z_WRITE = 0
-                F_DISABLE_Z_BUFFERING = 0
-                F_RENDER_BACKFACES = 1
-                F_BLEND_MODE = 0
-                F_TRANSLUCENT = 0
-                g_vColorTint = [9.0, 9.0, 9.0, 9.0]
-            })"),
+        .mat = create("materials/dev/metallic2.vmat",
+            R"(<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d}format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+        {
+            shader = "csgo_complex.vfx"
+            F_DISABLE_Z_PREPASS = 1
+            F_DISABLE_Z_WRITE = 1
+            F_BLEND_MODE = 1
+            F_RENDER_BACKFACES = 0
+            g_vColorTint = [1.0, 1.0, 1.0, 1.0]
+            g_bFogEnabled = 0
+            g_flMetalness = 1.000
+            g_flModelTintAmount = 1.000
+            g_nScaleTexCoordUByModelScaleAxis = 0
+            g_nScaleTexCoordVByModelScaleAxis = 0
+            g_nTextureAddressModeU = 0
+            g_nTextureAddressModeV = 0
+            g_flTexCoordRotation = 0.000
+            g_tColor = resource:"materials/dev/primary_white_color_tga_21186c76.vtex"
+            g_tAmbientOcclusion = resource:"materials/default/default_ao_tga_559f1ac6.vtex"
+            g_tNormal = resource:"materials/default/default_normal_tga_1b833b2a.vtex"
+        })"),
     };
 }
 
-c_color color_invisible = { 255, 0, 0 };
-c_color color_visible = { 0, 255, 0 };
-
 __int64 chams::hkOnGeneratePrimitives(void* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf)
 {
-    if (!I::engine_client->valid() || !render_buf || render_buf->m_arr_size <= 0)
-        return oOnGeneratePrimitives(desc, object, a3, render_buf);
+    return oOnGeneratePrimitives(desc, object, a3, render_buf);
+}
 
-    __int64 original = oOnGeneratePrimitives(desc, object, a3, render_buf);
-    
-    CBaseHandle render_ent = object->Owner();
-    if (!render_ent.valid())
-        return oOnGeneratePrimitives(desc, object, a3, render_buf);
+void* chams::hkDrawArray(uint64_t a1, uint64_t a2, c_mesh_primitive* a3, int32_t a4, uint64_t a5, uint64_t a6, uint64_t a7)
+{
+    if (!I::engine_client->valid())
+        return oDrawArray(a1, a2, a3, a4, a5, a6, a7);
 
-    if (G::g_chams_config.is_enabled)
+
+    for (int i = 0; i < a4; ++i)
     {
-        for (int i = 0; i < render_buf->m_arr_size; i++)
+        c_mesh_primitive* scene = &a3[i];
+        
+        if (scene)
         {
-            c_mesh_primitive* mesh_primitives = render_buf->get_primitive(i);
-            //auto entity = I::GameEntity->Instance->Get(render_ent);
+            CBaseHandle owner = scene->m_pSceneAnimatableObject->Owner();
 
-            //C_CSPlayerPawn* local = Hook::oGetLocalPlayer(0);
-            //if (entity == local)
-            //    continue;
+            if (!owner.valid())
+            {
+                return oDrawArray(a1, a2, a3, a4, a5, a6, a7);
+            }
 
-            //mesh_primitives->m_pMaterial = resourceMaterials[ChamsType::BLOOM].mat;
-            //mesh_primitives->m_pColor = color_invisible;
+            auto entity = I::GameEntity->Instance->Get(owner);
+            
+            C_CSPlayerPawn* local = Hook::oGetLocalPlayer(0);
+
+            if (entity == local)
+                continue;
+
+            if (entity->m_iHealth() > 0)
+            {
+                scene->m_pMaterial = resourceMaterials[ChamsType::BLOOM].mat_invs;
+                scene->m_pColor = {255, 0, 0};
+            }
         }
-        oOnGeneratePrimitives(desc, object, a3, render_buf);
     }
-
-    return original;
+    return oDrawArray(a1, a2, a3, a4, a5, a6, a7);
 }

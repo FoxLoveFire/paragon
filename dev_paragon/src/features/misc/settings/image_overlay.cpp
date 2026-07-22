@@ -1,6 +1,7 @@
 #include "image_overlay.h"
 #include "../../../sdk/menu/menu.h"
 #include "../../../../external/imgui/imgui.h"
+#include "../../../../external/imgui/imgui_internal.h"
 #include <wincodec.h>
 #include <urlmon.h>
 #include <vector>
