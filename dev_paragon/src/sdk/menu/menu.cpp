@@ -835,7 +835,6 @@ namespace Menu {
         UI::RenderOpenColorPicker();
 
         ApplySettingsToGlobals();
-
         ImGui::End();
     }
 }

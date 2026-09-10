@@ -60,6 +60,18 @@ bool I::initialize()
 		std::cout << "CCSGOInput " << m_csgo_input << std::endl;
 	}
 
+	uintptr_t CreateIntefaceAddr = Memory::pattern_scan("4C 8B 0D ?? ?? ?? ?? 4C 8B D2 4C 8B D9", "resourcesystem.dll");
+
+	if (CreateIntefaceAddr)
+	{
+		typedef void* (*CreateInterfaceFn)(const char*, int*);
+		IRS = ((CreateInterfaceFn)CreateIntefaceAddr)("ResourceSystem013", nullptr);
+		if (!IRS)
+		{
+			std::cout << "IRS not loaded!" << std::endl;
+			return false;
+		}
+	}
 
 	return true;
 }

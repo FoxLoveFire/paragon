@@ -8,6 +8,13 @@ __int64 __fastcall hkLevelInit(__int64 a1, __int64 a2)
     return original;
 }
 
+bool hkCreateMove(CCSGOInput* pInput, int nSlot, CUserCmd* pCmd)
+{
+    silentaim::runSilentAim(pInput, pCmd);
+
+    return oCreateMove(pInput, nSlot, pCmd);
+}
+
 void __fastcall hkFrameStageNotify(void* a1, int stage)
 {
 
@@ -16,6 +23,7 @@ void __fastcall hkFrameStageNotify(void* a1, int stage)
     case FRAME_RENDER_START:
         break;
     case FRAME_RENDER_END:
+        ModelChanger::ChangeModelNow();
         break;
     case FRAME_NET_UPDATE_END:
         break;
@@ -27,22 +35,28 @@ void __fastcall hkFrameStageNotify(void* a1, int stage)
     oFrameStageNotify(a1, stage);
 }
 
-bool Hook::Hook(const char* pattern, LPVOID detour, LPVOID* original, std::string module) {
-    uintptr_t addr = Memory::pattern_scan(pattern, module);
-    if (!addr) {
-        std::cout << "[ERROR] Pattern failed: " << module << " -> " << pattern << std::endl;
-        return false;
-    }
-    return HookAddress(addr, detour, original);
-}
-
-bool Hook::HookAddress(uintptr_t address, LPVOID detour, LPVOID* original) {
+bool Hook::HookAddress(void* address, LPVOID detour, LPVOID* original) {
     if (!address) return false;
 
     if (MH_CreateHook(reinterpret_cast<LPVOID>(address), detour, original) != MH_OK)
         return false;
 
     return MH_EnableHook(reinterpret_cast<LPVOID>(address)) == MH_OK;
+}
+
+bool Hook::Hook(const char* pattern, LPVOID detour, LPVOID* original, std::string module) {
+    uintptr_t addr = Memory::pattern_scan(pattern, module);
+    if (!addr) {
+        std::cout << "[ERROR] Pattern failed: " << module << " -> " << pattern << std::endl;
+        return false;
+    }
+    return HookAddress((void*)addr, detour, original);
+}
+
+template< typename T >
+__forceinline T get_method(void* thisptr, uintptr_t idx)
+{
+    return reinterpret_cast<T>((*static_cast<uintptr_t**>(thisptr))[idx]);
 }
 
 bool Hook::HookVtable(void* class_instance, int index, void* detour, void** original, std::string module) {
@@ -61,6 +75,9 @@ bool Hook::initialize()
         std::cout << "[-] MinHook init failed: " << MH_StatusToString(status) << std::endl;
         return false;
     }
+
+    fnSetModel = (void* (*)(void*, const char*))Memory::pattern_scan("40 53 48 83 EC ? 48 8B D9 4C 8B C2 48 8B 0D ? ? ? ? 48 8D 54 24", "client.dll");
+    fnPrecache = (void* (*)(void*, void*, const char*))Memory::pattern_scan("40 53 55 57 48 81 EC 80 00 00 00 48 8B 01 49 8B E8 48 8B FA", "resourcesystem.dll");
 
     oGetLocalPlayer = reinterpret_cast<decltype(oGetLocalPlayer)>(Memory::getAbsoluteAddress(
         Memory::pattern_scan("E8 ? ? ? ? 4C 8B E0 48 85 C0 0F 84 ? ? ? ? ? ? ? 48 8B C8 FF 92 ? ? ? ? 84 C0 0F 84 ? ? ? ? ? ? ? ? 49 8B CC", "client.dll"), 1));
@@ -94,20 +111,21 @@ bool Hook::initialize()
         (void**)&radarhack::oRadar, "client.dll");
     Hook("48 89 74 24 ? 57 48 83 EC ? 48 8B 0D ? ? ? ? 48 8B FA", hkLevelInit,
         (void**)&olevelInit, "client.dll");
-    Hook("48 89 5C 24 ? 48 89 6C 24 ? 57 48 83 EC ? 48 8B F9 33 ED", hkFrameStageNotify,
+    Hook("48 89 5C 24 ?? 48 89 6C 24 ?? 57 48 83 EC ?? 48 8B F9 33 ED", hkFrameStageNotify,
         (void**)&oFrameStageNotify, "client.dll");
-    //Hook("48 8B C4 4C 89 48 ? 4C 89 40 ? 48 89 50 ? 48 89 48 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70", chams::hkOnGeneratePrimitives,
-    //    (void**)&chams::oOnGeneratePrimitives, "scenesystem.dll"); -- надо крч использовать хук для чамсов
-    Hook("48 8B C4 53 57 41 54 48 81 EC ?? ?? ?? ?? 49 63 F9 49", chams::hkDrawArray,
-        (void**)&chams::oDrawArray, "scenesystem.dll");
+    //HookAddress(get_method<void*>(I::scene_system->get_scene_object_desc("AnimatableSceneObjectDesc"), 4), 
+    //    chams::hkOnGeneratePrimitives, (void**)&chams::oOnGeneratePrimitives);
     HookVtable(I::input_system, 76, D::hkIsRelativeMouseMode, 
         (void**)&D::oIsRelativeMouseMode, "inputsystem.dll");
-    Hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 41 8B E8", D::hkPresent,
+    Hook("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 83 EC ? 41 8B F0", D::hkPresent,
         (void**)&D::g_pOriginalPresent, "GameOverlayRenderer64.dll");
-    Hook("40 53 55 56 57 41 54 41 56 41 57 48 83 EC ? 44 8B E2", D::hkResizeBuffers,
-        (void**)&D::g_pResizeBuffers, "GameOverlayRenderer64.dll");
+    //Hook("48 89 5C 24 08 48 89 6C 24 10 56 57 41 54 41 56 41 57 48 83 EC 20 41 8B", D::hkResizeBuffers,
+    //    (void**)&D::g_pResizeBuffers, "GameOverlayRenderer64.dll");
+    Hook("48 8B C4 4C 89 40 18 48 89 48 08 55 53 41 54 41 55", hkCreateMove, 
+        (void**)&oCreateMove, "client.dll");
 
     Material::material_init();
+    ModelChanger::ScanModels();
 
     std::cout << "[+] All hooks installed successfully!" << std::endl;
     return true;

@@ -36,7 +36,7 @@ void __fastcall OverrideView::hkOverrideView(void* pClientModeCSNormal, c_view_s
             if (!I::engine_client || !I::engine_client->valid() || local_player->getHealth() <= 0)
                 return oOverrideView(pClientModeCSNormal, pSetup);
 
-            vector3d angles = I::m_csgo_input->GetViewAngles();
+            QAngle_t angles = I::m_csgo_input->GetViewAngles();
 
             float rad_pitch = degrees_to_radians(angles.x);
             float rad_yaw = degrees_to_radians(angles.y);

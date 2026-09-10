@@ -2,6 +2,7 @@
 #include "../features/misc/settings/watermark.h"
 #include "../features/esp/esp.h"
 #include "../../paragon.h"
+#include "../features/modelchanger/ModelChanger.h"
 
 ID3D11Device* D::g_pDevice = nullptr;
 ID3D11DeviceContext* D::g_pContext = nullptr;
@@ -21,6 +22,10 @@ namespace D
 {
     LRESULT CALLBACK WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
+        if (uMsg == WM_MBUTTONDOWN) {
+            G::viewport.thirdperson = !G::viewport.thirdperson;
+        }
+
         if (uMsg == WM_KEYDOWN && wParam == VK_INSERT)
         {
             G::menu.show = !G::menu.show;
@@ -118,6 +123,7 @@ namespace D
 
             g_pContext->OMSetRenderTargets(1, &g_pRenderTargetView, nullptr);
 
+
             ImGui_ImplDX11_NewFrame();
             ImGui_ImplWin32_NewFrame();
             ImGui::NewFrame();
@@ -127,8 +133,39 @@ namespace D
 
             if (G::menu.show) {
                 Menu::Render();
-            }
 
+                ImGui::Begin("TestModels");
+                if (!ModelChanger::Models.empty() && ModelChanger::SelectedIdx >= 0 && ModelChanger::SelectedIdx < ModelChanger::Models.size())
+                {
+                    if (ImGui::BeginCombo("CHOOSE A MODEL", ModelChanger::Models[ModelChanger::SelectedIdx].first.c_str())) {
+                        for (int i = 0; i < ModelChanger::Models.size(); i++) {
+                            bool is_selected = (ModelChanger::SelectedIdx == i);
+                            if (ImGui::Selectable(ModelChanger::Models[i].first.c_str(), is_selected)) {
+                                ModelChanger::SelectedIdx = i;
+                                if (i != 0) {
+                                    ModelChanger::NeedSetModel = true;
+                                    std::cout << "Model Selected: " << ModelChanger::Models[i].first.c_str() << std::endl;
+                                }
+                                else {
+                                    std::cout << "Model Changer Disabled" << std::endl;
+                                }
+                            }
+                            if (is_selected) ImGui::SetItemDefaultFocus();
+                        }
+                        ImGui::EndCombo();
+                    }
+                }
+                else
+                {
+                    ImGui::Text("Models not loaded or vector empty!");
+                }
+
+                if (ImGui::Button("REFRESH MODELS")) {
+                    ModelChanger::ScanModels();
+                }
+
+                ImGui::End();
+            }
             ImGui::Render();
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 

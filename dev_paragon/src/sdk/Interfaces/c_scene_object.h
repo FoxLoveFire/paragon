@@ -1,5 +1,6 @@
 #pragma once
 #include "../math/vector4d.h"
+#include "../memory/memory.h"
 
 class c_light_data_queue
 {
@@ -14,6 +15,11 @@ class c_scene_system
 public:
     char pad_0000[7864]; //0x0000
     c_light_data_queue* light_data_queue; //0x2A08
+
+	void* get_scene_object_desc(const char* desc_name)
+	{
+		return Memory::call_vfunc<void*>(this, 17, desc_name);
+	}
 };
 
 class c_aggregate_object_data

@@ -9,6 +9,7 @@ bool sdk::initialize()
 	EnsureCapacityBuffer = reinterpret_cast<decltype(EnsureCapacityBuffer)>(GetProcAddress(tier0_base, "?EnsureCapacity@CUtlBuffer@@QEAAXH@Z"));
 	PutUtlString = reinterpret_cast<decltype(PutUtlString)>(GetProcAddress(tier0_base, "?PutString@CUtlBuffer@@QEAAXPEBD@Z"));
 	LoadKeyValues = reinterpret_cast<decltype(LoadKeyValues)>(GetProcAddress(tier0_base, "?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBDI@Z"));
+	CBufferString::fnInsert = (const char* (__fastcall*)(void*, int, const char*, int, bool))GetProcAddress((HMODULE)tier0_base, "?Insert@CBufferString@@QEAAPEBDHPEBDH_N@Z");
 
 	CreateMaterial = reinterpret_cast<decltype(CreateMaterial)>(Memory::pattern_scan("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 4C 8B F2", "materialsystem2.dll"));
 	if (CreateMaterial) {

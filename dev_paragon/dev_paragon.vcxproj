@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\features\modelchanger\ModelChanger.h" />
+    <ClInclude Include="src\features\silentaim\silentaim.h" />
     <ClInclude Include="src\features\esp\esp.h" />
     <ClInclude Include="src\features\misc\settings\steam_api.h" />
     <ClInclude Include="src\sdk\cs2\datatypes\usercmd\usercmd.h" />
@@ -27,6 +29,7 @@
     <ClInclude Include="src\sdk\cs2\classes\CEntityInstance\CEntityInstance.h" />
     <ClInclude Include="src\sdk\cs2\classes\C_BaseEntity\C_BaseEntity.h" />
     <ClInclude Include="src\sdk\math\viewmatrix_t.h" />
+    <ClInclude Include="src\sdk\utils\cbufferstring\CBufferString.h" />
     <ClInclude Include="src\sdk\utils\CHandle\handle.h" />
     <ClInclude Include="src\sdk\cs2\datatypes\C_Material\C_Material.h" />
     <ClInclude Include="src\sdk\utils\CStrongHandle\CStrongHandle.h" />
@@ -97,6 +100,8 @@
     <ClInclude Include="src\sdk\utils\viewmatrix\viewmatrix.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\features\modelchanger\ModelChanger.cpp" />
+    <ClCompile Include="src\features\silentaim\silentaim.cpp" />
     <ClCompile Include="src\features\esp\esp.cpp" />
     <ClCompile Include="src\sdk\Interfaces\CGameEntitySystem\CGameEntitySystem.cpp" />
     <ClCompile Include="src\sdk\cs2\classes\CCSPlayerController\CCSPlayerController.cpp" />

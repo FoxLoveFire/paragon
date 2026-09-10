@@ -243,6 +243,15 @@
     <ClInclude Include="src\sdk\utils\viewmatrix\viewmatrix.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\features\silentaim\silentaim.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\features\modelchanger\ModelChanger.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdk\utils\cbufferstring\CBufferString.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -375,6 +384,12 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\sdk\utils\viewmatrix\viewmatrix.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\features\silentaim\silentaim.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\features\modelchanger\ModelChanger.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

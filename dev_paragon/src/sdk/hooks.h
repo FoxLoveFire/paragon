@@ -14,6 +14,8 @@
 #include "../features/esp/esp.h"
 #include "cs2/classes/C_CSPlayerPawn/C_CSPlayerPawn.h"
 #include "cs2/classes/CCSPlayerController/CCSPlayerController.h"
+#include "../features/silentaim/silentaim.h"
+#include "../features/modelchanger/ModelChanger.h"
 #include "../../globals.h"
 #include "dx11hook.h"
 #include <string>
@@ -30,14 +32,19 @@
 
 using levelInitFn = __int64(__fastcall*)(__int64 a1, __int64 a2);
 inline levelInitFn olevelInit = nullptr;
+
 using FrameStageNotifyFn = void(__fastcall*)(void* a1, int stage);
 inline FrameStageNotifyFn oFrameStageNotify = nullptr;
+
+using CreateMoveFn = bool(__fastcall*)(CCSGOInput* pInput, int nSlot, CUserCmd* pCmd);
+inline CreateMoveFn oCreateMove = nullptr;
+
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace Hook
 {
     bool Hook(const char* pattern, LPVOID detour, LPVOID* original, std::string module);
-    bool HookAddress(uintptr_t address, LPVOID detour, LPVOID* original);
+    bool HookAddress(void* address, LPVOID detour, LPVOID* original);
     bool HookVtable(void* class_instance, int index, void* detour, void** original, std::string module);
 
     bool initialize();
@@ -45,4 +52,7 @@ namespace Hook
 
     inline C_CSPlayerPawn* (__fastcall* oGetLocalPlayer)(int);
     inline void* (__fastcall* ogGetBaseEntity)(void*, int);
+
+    inline void* (*fnSetModel)(void*, const char*) = nullptr;
+    inline void* (*fnPrecache)(void*, void*, const char*) = nullptr;
 }

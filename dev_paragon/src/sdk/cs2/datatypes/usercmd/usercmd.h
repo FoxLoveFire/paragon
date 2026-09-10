@@ -338,21 +338,21 @@ public:
 	char pad05[0x4];                       // 0x0624 
 	void* message;              // 0x0628 
 
-	void SetViewAngle(vector3d& angView)
+	void SetViewAngle(QAngle_t& angView)
 	{
-		using set_view_angles_t = void(__fastcall*)(CCSGOInput*, int, vector3d&);
+		using set_view_angles_t = void(__fastcall*)(CCSGOInput*, int, QAngle_t&);
 		static set_view_angles_t set_view_angles = reinterpret_cast<set_view_angles_t>
 		(Memory::pattern_scan("85 D2 75 3D 48 63 81 ? ? ? ?", "client.dll"));
 
 		set_view_angles(this, 0, angView);
 	}
 
-	vector3d& GetViewAngles()
+	QAngle_t& GetViewAngles()
 	{
 		using get_view_angles_t = void* (__fastcall*)(CCSGOInput*, int);
 		static get_view_angles_t get_view_angles = reinterpret_cast<get_view_angles_t>
 		(Memory::pattern_scan("4C 8B C1 85 D2 74 08 48 8D 05 ? ? ? ? C3", "client.dll"));
 		
-		return *reinterpret_cast<vector3d*>(get_view_angles(this, 0));
+		return *reinterpret_cast<QAngle_t*>(get_view_angles(this, 0));
 	}
 };

@@ -57,8 +57,8 @@ public:
 class c_mesh_primitive_output_buffer {
 public:
 	c_mesh_primitive* m_mesh_primitive_array;
-	char pad0[4];
 	int m_arr_size;
+	char pad0[4];
 
 	c_mesh_primitive* get_primitive(int index) {
 		return &m_mesh_primitive_array[index];

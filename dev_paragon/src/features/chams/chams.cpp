@@ -78,38 +78,43 @@ void Material::material_init()
     };
 }
 
-void* chams::hkDrawArray(uint64_t a1, uint64_t a2, c_mesh_primitive* a3, int32_t a4, uint64_t a5, uint64_t a6, uint64_t a7)
+__int64 chams::hkOnGeneratePrimitives(void* desc, CSceneAnimatableObject* object, __int64 a3, c_mesh_primitive_output_buffer* render_buf)
 {
-    if (!I::engine_client->valid())
-        return oDrawArray(a1, a2, a3, a4, a5, a6, a7);
+    if (!I::engine_client->valid() || !render_buf || render_buf->m_arr_size <= 0) {
+        return oOnGeneratePrimitives(desc, object, a3, render_buf);
+    }
 
+    CBaseHandle render_ent = object->Owner();
+    if (!render_ent.valid()) {
+        return oOnGeneratePrimitives(desc, object, a3, render_buf);
+    }
 
-    for (int i = 0; i < a4; ++i)
+    auto entity = I::GameEntity->Instance->Get(render_ent);
+    if (!entity) {
+        return oOnGeneratePrimitives(desc, object, a3, render_buf);
+    }
+
+    C_CSPlayerPawn* local = Hook::oGetLocalPlayer(0);
+
+    bool shouldProcess = G::g_chams_config.is_enabled &&
+        entity != local &&
+        entity->m_iHealth() > 0;
+
+    // MODIFY BEFORE CALLING ORIGINAL
+    if (shouldProcess)
     {
-        c_mesh_primitive* scene = &a3[i];
-        
-        if (scene)
+        for (int i = 0; i < render_buf->m_arr_size; i++)
         {
-            CBaseHandle owner = scene->m_pSceneAnimatableObject->Owner();
+            c_mesh_primitive* mesh_primitives = render_buf->get_primitive(i);
+            if (!mesh_primitives) continue;
 
-            if (!owner.valid())
-            {
-                return oDrawArray(a1, a2, a3, a4, a5, a6, a7);
-            }
-
-            auto entity = I::GameEntity->Instance->Get(owner);
-            
-            C_CSPlayerPawn* local = Hook::oGetLocalPlayer(0);
-
-            if (entity == local)
-                continue;
-
-            if (entity->m_iHealth() > 0)
-            {
-                scene->m_pMaterial = resourceMaterials[ChamsType::BLOOM].mat_invs;
-                scene->m_pColor = {255, 0, 0};
+            auto& matResource = resourceMaterials[ChamsType::BLOOM];
+            if (matResource.mat_invs) {
+                mesh_primitives->m_pMaterial = matResource.mat_invs;
+                mesh_primitives->m_pColor = { 255, 0, 0 };
             }
         }
     }
-    return oDrawArray(a1, a2, a3, a4, a5, a6, a7);
+
+    return oOnGeneratePrimitives(desc, object, a3, render_buf);
 }

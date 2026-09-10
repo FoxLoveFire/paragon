@@ -28,6 +28,7 @@ namespace I
 	inline IGameResourceService* GameEntity = nullptr;
 	inline CCSGOInput* m_csgo_input = nullptr;
 	inline void* input_system = nullptr;
-
+	inline void* IRS = nullptr;
+	
 	bool initialize();
 }

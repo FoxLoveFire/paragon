@@ -4,6 +4,7 @@
 #include "utils/cutlbuffer/cutlbuffer.h"
 #include "utils/keyvalues/keyvalues.h"
 #include "math/viewmatrix_t.h"
+#include "utils/cbufferstring/CBufferString.h"
 
 class CUtlBuffer;
 class CUtlString;
@@ -17,7 +18,6 @@ namespace sdk
 	inline void(__fastcall* PutUtlString)(CUtlBuffer*, const char*);
 	inline bool(__fastcall* LoadKeyValues)(CKeyValues3*, void*, CUtlBuffer*, const KV3ID_t*, const char*);
 	inline std::int64_t(__fastcall* CreateMaterial)(void*, void**, const char*, void*, void*, char);
-
 
 	viewmatrix_t* GetViewMatrix();
 	bool initialize();
